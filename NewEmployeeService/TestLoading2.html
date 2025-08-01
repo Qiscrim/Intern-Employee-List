@@ -1,0 +1,349 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Management System</title>
+	<meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" /> <!-- Loads the Bootstrap CSS file -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Loads jQuery library from a CDN -->
+    <script src="Scripts/bootstrap.min.js"></script> <!-- Loads the Bootstrap JavaScript functionality -->
+    <style>
+            body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #F5E7DE 50%, #F2BFA4 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #4A3F35;
+}
+
+/* Container background */
+.well {
+    background-color: #FFF6F1;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 16px;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    color: #D35C69;
+}
+.btn:hover {
+    transform: scale(1.05);
+}
+
+/* Specific button colors */
+.btn-success {
+    background-color: #E97451;
+}
+.btn-success:hover {
+    background-color: #d86444;
+    transform: scale(1.05);
+}
+
+.btn-primary {
+    background-color: #D35C69;
+    color: #FFF6F1;
+}
+.btn-primary:hover {
+    background-color: #c14e5a;
+    transform: scale(1.05);
+}
+
+.btn-danger {
+    background-color: #9C6B78;
+}
+.btn-danger:hover {
+    background-color: #875a65;
+    transform: scale(1.05);
+}
+
+/* Table styling (optional) */
+table {
+    background-color: #fffaf7;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #f2c4ae;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* <-- added shadow (horizontal offset, vertical, blur */
+    border-radius: 8px; /* optional: to make corners rounded */
+    overflow: hidden; /* optional: makes sure rounded corners apply to children */
+}
+
+
+td {
+    padding: 12px;
+    border: 1px solid #f2c4ae;
+    color: #4A3F35;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #F2BFA4;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.form-section {
+    background-color: #fffaf7;
+    padding: 20px;
+    border: 1px solid #f2c4ae;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #4A3F35;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #f2c4ae;
+    border-radius: 5px;
+}
+    .edit-btn, .delete-btn {
+        border: none;
+        padding: 6px 12px;
+        margin-right: 5px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+    .edit-btn {
+        background-color: #e0a800; /* yellow */
+        color: #fff;
+    }
+
+    .edit-btn:hover {
+        background-color: #e0a800;
+    }
+
+    .delete-btn {
+        background-color: #c14e5a; /* red */
+        color: #fff;
+    }
+
+    .delete-btn:hover {
+        background-color: #c82333;
+    }
+
+
+    </style>
+</head>
+<body>
+
+    <section class="form-section">
+        <h2>Add New Employee</h2>
+        <form id="employeeForm">
+            <input type="hidden" id="employeeId" name="employeeId" />
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required />
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required />
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required />
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <input type="text" id="role" name="role" required />
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary" id="saveButton">
+                    <span id="saveButtonText">Save Employee</span>
+                </button>
+                <button type="button" class="btn btn-secondary" id="cancelButton">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-secondary" id="refreshButton">
+                    Refresh List
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <section class="table-section">
+        <h2>Employee List</h2>
+            <table class="employee-table" id="employeeTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Age</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+    </section>
+
+
+    <script>
+    $(document).ready(function () {
+        // ----- CANCEL BUTTON -----
+        // Clears form fields, resets hidden ID, and restores button text to default
+        $('#cancelButton').click(function () {
+            $('#employeeForm')[0].reset();                   // Clear all input fields in the form
+            $('#employeeId').val('');                        // Clear hidden field (used for tracking edit mode)
+            $('#saveButtonText').text('Save Employee');      // Set button back to "Save Employee"
+        });
+
+        // ----- REFRESH BUTTON -----
+        // Fetches employee data from API and repopulates the table
+        $('#refreshButton').click(function () {
+            $.ajax({
+                url: 'http://localhost:60664/api/newemployee',  // API endpoint to GET all employees
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $('#employeeTableBody').empty();  // Clear existing table rows
+
+                    // Loop through each employee in returned data
+                    $.each(data, function (i, employee) {
+                        // Construct table row using template literals
+                        var row = `
+                            <tr>
+                                <td>${employee.ID}</td>
+                                <td>${employee.FirstName}</td>
+                                <td>${employee.LastName}</td>
+                                <td>${employee.Age}</td>
+                                <td>${employee.Role}</td>
+                                <td>
+                                    <!-- Each row includes Edit and Delete buttons -->
+                                    <button class="edit-btn" data-id="${employee.ID}">✏️ Edit</button>
+                                    <button class="delete-btn" data-id="${employee.ID}">🗑 Delete</button>
+                                </td>
+                            </tr>`;
+                        $('#employeeTableBody').append(row); // Add row to table body
+                    });
+                },
+                error: function () {
+                    alert('Failed to load employee data.');
+                }
+            });
+        });
+
+        // ----- FORM SUBMIT (ADD or UPDATE) -----
+        // Handles both creating a new employee and updating an existing one
+        $('#employeeForm').submit(function (e) {
+            e.preventDefault(); // Prevent form from refreshing the page
+
+            const id = $('#employeeId').val(); // Check hidden field to know if we're updating or adding
+            const employeeData = {
+                FirstName: $('#firstName').val(),
+                LastName: $('#lastName').val(),
+                Age: $('#age').val(),
+                Role: $('#role').val()
+            };
+
+            if (id) {
+                // ---- UPDATE EXISTING EMPLOYEE (PUT) ----
+                $.ajax({
+                    url: `http://localhost:60664/api/newemployee/${id}`, // API with ID
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(employeeData), // Convert data to JSON
+                    success: function () {
+                        alert('Employee updated!');
+                        $('#employeeForm')[0].reset();              // Clear form
+                        $('#saveButtonText').text('Save Employee'); // Restore button text
+                        $('#employeeId').val('');                   // Clear hidden ID
+                        $('#refreshButton').click();                // Reload table
+                    },
+                    error: function () {
+                        alert('Failed to update employee.');
+                    }
+                });
+            } else {
+                // ---- ADD NEW EMPLOYEE (POST) ----
+                $.ajax({
+                    url: 'http://localhost:60664/api/newemployee',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(employeeData), // Send new employee data
+                    success: function () {
+                        alert('Employee added!');
+                        $('#employeeForm')[0].reset();     // Clear form
+                        $('#refreshButton').click();       // Reload table
+                    },
+                    error: function () {
+                        alert('Failed to add employee.');
+                    }
+                });
+            }
+        });
+
+        // ----- DELETE BUTTON -----
+        // Triggered when the delete icon is clicked for a row
+        $(document).on('click', '.delete-btn', function () {
+            const id = $(this).data('id'); // Get employee ID from data-id attribute
+
+            if (confirm('Are you sure you want to delete this employee?')) {
+                $.ajax({
+                    url: `http://localhost:60664/api/newemployee/${id}`, // DELETE request to API
+                    type: 'DELETE',
+                    success: function () {
+                        alert('Employee deleted.');
+                        $('#refreshButton').click(); // Reload updated table
+                    },
+                    error: function () {
+                        alert('Failed to delete employee.');
+                    }
+                });
+            }
+        });
+
+        // ----- EDIT BUTTON -----
+        // Loads clicked employee's data into the form for editing
+        $(document).on('click', '.edit-btn', function () {
+            const row = $(this).closest('tr'); // Get the whole row for this button
+            const id = $(this).data('id');
+            const firstName = row.find('td:eq(1)').text(); // Read value from each cell
+            const lastName = row.find('td:eq(2)').text();
+            const age = row.find('td:eq(3)').text();
+            const role = row.find('td:eq(4)').text();
+
+            // Populate form fields with data
+            $('#employeeId').val(id);                  // Save ID to hidden input
+            $('#firstName').val(firstName);
+            $('#lastName').val(lastName);
+            $('#age').val(age);
+            $('#role').val(role);
+            $('#saveButtonText').text('Update Employee'); // Change button label to indicate update
+        });
+    });
+    </script>
+
+
+
+
+
+</body>
+</html>

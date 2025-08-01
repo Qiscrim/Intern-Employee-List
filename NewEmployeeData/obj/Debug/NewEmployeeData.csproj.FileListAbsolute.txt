@@ -1,0 +1,10 @@
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\bin\Debug\NewEmployeeData.dll.config
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\bin\Debug\NewEmployeeData.dll
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\bin\Debug\NewEmployeeData.pdb
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\bin\Debug\EntityFramework.dll
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\bin\Debug\EntityFramework.SqlServer.dll
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\bin\Debug\EntityFramework.xml
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\bin\Debug\EntityFramework.SqlServer.xml
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\obj\Debug\NewEmployeeData.csprojResolveAssemblyReference.cache
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\obj\Debug\NewEmployeeData.dll
+c:\users\user\documents\visual studio 2015\Projects\NewEmployeeService\NewEmployeeData\obj\Debug\NewEmployeeData.pdb

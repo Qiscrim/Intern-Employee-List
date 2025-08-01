@@ -1,0 +1,883 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --secondary-color: #2196F3;
+            --secondary-hover: #1976D2;
+            --danger-color: #f44336;
+            --danger-hover: #d32f2f;
+            --warning-color: #ff9800;
+            --warning-hover: #f57c00;
+            --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--background-gradient);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+            .header h1 {
+                font-size: clamp(1.8rem, 4vw, 2.5rem);
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+            }
+
+            .header p {
+                opacity: 0.9;
+                font-size: 1.1rem;
+            }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+            .form-section h2 {
+                color: #333;
+                margin-bottom: 1.5rem;
+                font-size: 1.4rem;
+                font-weight: 600;
+            }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .form-group label {
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+                color: #555;
+                font-size: 0.9rem;
+            }
+
+        .form-input {
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+            .form-input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+            }
+
+            .form-input.error {
+                border-color: var(--danger-color);
+                box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+            }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            min-height: 44px;
+        }
+
+            .btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none !important;
+            }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            color: white;
+        }
+
+            .btn-primary:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-hover) 100%);
+            color: white;
+        }
+
+            .btn-secondary:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+            }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-hover) 100%);
+            color: white;
+        }
+
+            .btn-danger:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+            }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color) 0%, var(--warning-hover) 100%);
+            color: white;
+        }
+
+            .btn-warning:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+            }
+
+        .table-section h2 {
+            margin-bottom: 1rem;
+            color: #333;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+            .employee-table th {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 1rem;
+                text-align: left;
+                font-weight: 600;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+
+            .employee-table td {
+                padding: 1rem;
+                border-bottom: 1px solid #f0f0f0;
+                vertical-align: middle;
+            }
+
+            .employee-table tbody tr {
+                transition: var(--transition);
+            }
+
+                .employee-table tbody tr:hover {
+                    background-color: #f8f9fa;
+                }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .message.success {
+                background: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+
+            .message.error {
+                background: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+
+            .message.info {
+                background: #d1ecf1;
+                color: #0c5460;
+                border: 1px solid #bee5eb;
+            }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 1rem;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+
+            .employee-table {
+                font-size: 0.8rem;
+            }
+
+                .employee-table th,
+                .employee-table td {
+                    padding: 0.5rem;
+                }
+        }
+
+        @media (max-width: 640px) {
+            .employee-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏢 Employee Management System</h1>
+            <p>Modern CRUD Operations with Enhanced UX</p>
+        </header>
+
+        <main class="content">
+            <section class="form-section">
+                <h2 id="formTitle">➕ Add New Employee</h2>
+
+                <form id="employeeForm" novalidate>
+                    <input type="hidden" id="employeeId">
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span style="color: var(--danger-color);">*</span></label>
+                            <input type="text"
+                                   id="firstName"
+                                   class="form-input"
+                                   placeholder="Enter first name"
+                                   required
+                                   maxlength="50"
+                                   autocomplete="given-name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span style="color: var(--danger-color);">*</span></label>
+                            <input type="text"
+                                   id="lastName"
+                                   class="form-input"
+                                   placeholder="Enter last name"
+                                   required
+                                   maxlength="50"
+                                   autocomplete="family-name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age">Age <span style="color: var(--danger-color);">*</span></label>
+                            <input type="number"
+                                   id="age"
+                                   class="form-input"
+                                   placeholder="Enter age"
+                                   min="18"
+                                   max="100"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="role">Role <span style="color: var(--danger-color);">*</span></label>
+                            <input type="text"
+                                   id="role"
+                                   class="form-input"
+                                   placeholder="Enter job role"
+                                   required
+                                   maxlength="100"
+                                   autocomplete="organization-title">
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary" id="saveButton">
+                            <span id="saveButtonText">💾 Save Employee</span>
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="cancelButton">
+                            ❌ Cancel
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="refreshButton">
+                            🔄 Refresh List
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <div id="messageContainer" role="alert" aria-live="polite"></div>
+
+            <section class="table-section">
+                <h2>📋 Employee List</h2>
+                <div class="table-container">
+                    <table class="employee-table" id="employeeTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        'use strict';
+
+        /**
+         * Enhanced Employee Management System
+         * Improved version with better practices, error handling, and UX
+         */
+
+        class EmployeeManager {
+            constructor(apiBaseUrl) {
+                this.apiBaseUrl = apiBaseUrl;
+                this.isEditMode = false;
+                this.currentEmployeeId = null;
+                this.employees = [];
+                this.messageTimeout = null;
+
+                // Cache DOM elements
+                this.elements = {
+                    form: $('#employeeForm'),
+                    employeeId: $('#employeeId'),
+                    firstName: $('#firstName'),
+                    lastName: $('#lastName'),
+                    age: $('#age'),
+                    role: $('#role'),
+                    formTitle: $('#formTitle'),
+                    saveButton: $('#saveButton'),
+                    saveButtonText: $('#saveButtonText'),
+                    cancelButton: $('#cancelButton'),
+                    refreshButton: $('#refreshButton'),
+                    messageContainer: $('#messageContainer'),
+                    tableBody: $('#employeeTableBody')
+                };
+
+                this.init();
+            }
+
+            init() {
+                console.log('🚀 Employee Management System initialized');
+                this.setupAjaxDefaults();
+                this.bindEvents();
+                this.loadEmployees();
+            }
+
+            setupAjaxDefaults() {
+                $.ajaxSetup({
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    timeout: 30000,
+                    beforeSend: (xhr) => {
+                        // Add any auth headers here if needed
+                        // xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                    }
+                });
+            }
+
+            bindEvents() {
+                // Form submission
+                this.elements.form.on('submit', (e) => {
+                    e.preventDefault();
+                    this.saveEmployee();
+                });
+
+                // Button clicks
+                this.elements.cancelButton.on('click', () => this.cancelEdit());
+                this.elements.refreshButton.on('click', () => this.loadEmployees());
+
+                // Dynamic event delegation for table buttons
+                $(document).on('click', '.btn-edit', (e) => {
+                    const employeeId = $(e.currentTarget).data('employee-id');
+                    this.editEmployee(employeeId);
+                });
+
+                $(document).on('click', '.btn-delete', (e) => {
+                    const employeeId = $(e.currentTarget).data('employee-id');
+                    this.deleteEmployee(employeeId);
+                });
+
+                // Real-time form validation
+                this.elements.form.find('input[required]').on('blur', (e) => {
+                    this.validateField($(e.target));
+                });
+
+                // Clear validation on input
+                this.elements.form.find('input').on('input', (e) => {
+                    $(e.target).removeClass('error');
+                });
+            }
+
+            async loadEmployees() {
+                try {
+                    this.showMessage('Loading employees...', 'info');
+
+                    const employees = await this.makeRequest('GET', this.apiBaseUrl);
+                    this.employees = employees;
+                    this.renderEmployeesTable(employees);
+
+                    this.showMessage(`✅ Successfully loaded ${employees.length} employees`, 'success');
+                } catch (error) {
+                    this.handleError('Failed to load employees', error);
+                }
+            }
+
+            async editEmployee(employeeId) {
+                try {
+                    this.showMessage('Loading employee data...', 'info');
+
+                    const employee = await this.makeRequest('GET', `${this.apiBaseUrl}/${employeeId}`);
+                    this.populateForm(employee);
+                    this.scrollToForm();
+
+                    this.showMessage('📝 Employee loaded for editing', 'info');
+                } catch (error) {
+                    this.handleError('Failed to load employee for editing', error);
+                }
+            }
+
+            async saveEmployee() {
+                if (!this.validateForm()) return;
+
+                const employeeData = this.getFormData();
+                const method = this.isEditMode ? 'PUT' : 'POST';
+                const url = this.isEditMode ? `${this.apiBaseUrl}/${this.currentEmployeeId}` : this.apiBaseUrl;
+
+                try {
+                    this.setLoadingState(true);
+
+                    await this.makeRequest(method, url, employeeData);
+
+                    const successMessage = this.isEditMode ?
+                        '✅ Employee updated successfully!' :
+                        '✅ Employee created successfully!';
+
+                    this.showMessage(successMessage, 'success');
+                    this.clearForm();
+                    await this.loadEmployees();
+                } catch (error) {
+                    this.handleError('Failed to save employee', error);
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+
+            async deleteEmployee(employeeId) {
+                const employee = this.employees.find(emp => emp.ID == employeeId);
+                const employeeName = employee ? `${employee.FirstName} ${employee.LastName}` : 'this employee';
+
+                if (!confirm(`⚠️ Are you sure you want to delete ${employeeName}?\n\nThis action cannot be undone.`)) {
+                    return;
+                }
+
+                try {
+                    this.showMessage('Deleting employee...', 'info');
+
+                    await this.makeRequest('DELETE', `${this.apiBaseUrl}/${employeeId}`);
+
+                    this.showMessage('✅ Employee deleted successfully!', 'success');
+                    await this.loadEmployees();
+                } catch (error) {
+                    this.handleError('Failed to delete employee', error);
+                }
+            }
+
+            makeRequest(method, url, data = null) {
+                return new Promise((resolve, reject) => {
+                    const config = {
+                        type: method,
+                        url: url,
+                        success: (response) => resolve(response),
+                        error: (xhr, textStatus, errorThrown) => {
+                            reject({ xhr, textStatus, errorThrown });
+                        }
+                    };
+
+                    // Configure request based on method
+                    if (method === 'GET') {
+                        config.dataType = 'json';
+                    } else if (method === 'DELETE') {
+                        // DELETE expects empty response - don't set dataType
+                        config.success = (response, textStatus, xhr) => {
+                            // DELETE successful if we get 200 status
+                            resolve({ success: true, message: 'Deleted successfully' });
+                        };
+                        config.error = (xhr, textStatus, errorThrown) => {
+                            // Handle successful DELETE with empty response (parsererror)
+                            if (xhr.status === 200 && textStatus === 'parsererror') {
+                                console.log('✅ DELETE successful - empty response received');
+                                resolve({ success: true, message: 'Deleted successfully' });
+                            } else {
+                                reject({ xhr, textStatus, errorThrown });
+                            }
+                        };
+                    } else {
+                        // POST and PUT expect JSON responses
+                        config.dataType = 'json';
+                    }
+
+                    if (data) {
+                        config.data = JSON.stringify(data);
+                    }
+
+                    $.ajax(config);
+                });
+            }
+
+            populateForm(employee) {
+                this.elements.employeeId.val(employee.ID);
+                this.elements.firstName.val(employee.FirstName);
+                this.elements.lastName.val(employee.LastName);
+                this.elements.age.val(employee.Age);
+                this.elements.role.val(employee.Role);
+
+                this.isEditMode = true;
+                this.currentEmployeeId = employee.ID;
+                this.elements.formTitle.text('✏️ Edit Employee');
+                this.elements.saveButtonText.text('💾 Update Employee');
+
+                this.elements.firstName.focus();
+            }
+
+            getFormData() {
+                return {
+                    FirstName: this.elements.firstName.val().trim(),
+                    LastName: this.elements.lastName.val().trim(),
+                    Age: parseInt(this.elements.age.val()),
+                    Role: this.elements.role.val().trim()
+                };
+            }
+
+            validateForm() {
+                let isValid = true;
+                const requiredFields = this.elements.form.find('input[required]');
+
+                requiredFields.each((index, field) => {
+                    if (!this.validateField($(field))) {
+                        isValid = false;
+                    }
+                });
+
+                return isValid;
+            }
+
+            validateField($field) {
+                const value = $field.val().trim();
+                const fieldName = $field.attr('id');
+                let isValid = true;
+                let errorMessage = '';
+
+                // Required field validation
+                if ($field.prop('required') && !value) {
+                    isValid = false;
+                    errorMessage = `${this.getFieldLabel(fieldName)} is required`;
+                }
+
+                // Specific field validations
+                if (value) {
+                    switch (fieldName) {
+                        case 'age':
+                            const age = parseInt(value);
+                            if (isNaN(age) || age < 18 || age > 100) {
+                                isValid = false;
+                                errorMessage = 'Age must be between 18 and 100';
+                            }
+                            break;
+                        case 'firstName':
+                        case 'lastName':
+                            if (value.length < 2) {
+                                isValid = false;
+                                errorMessage = `${this.getFieldLabel(fieldName)} must be at least 2 characters`;
+                            }
+                            break;
+                    }
+                }
+
+                // Update UI based on validation
+                if (isValid) {
+                    $field.removeClass('error');
+                } else {
+                    $field.addClass('error');
+                    this.showMessage(`❌ ${errorMessage}`, 'error');
+                    $field.focus();
+                }
+
+                return isValid;
+            }
+
+            getFieldLabel(fieldName) {
+                const labels = {
+                    firstName: 'First Name',
+                    lastName: 'Last Name',
+                    age: 'Age',
+                    role: 'Role'
+                };
+                return labels[fieldName] || fieldName;
+            }
+
+            clearForm() {
+                this.elements.form[0].reset();
+                this.elements.employeeId.val('');
+
+                this.isEditMode = false;
+                this.currentEmployeeId = null;
+                this.elements.formTitle.text('➕ Add New Employee');
+                this.elements.saveButtonText.text('💾 Save Employee');
+
+                // Remove any error states
+                this.elements.form.find('.error').removeClass('error');
+            }
+
+            cancelEdit() {
+                this.clearForm();
+                this.showMessage('✏️ Edit cancelled', 'info');
+            }
+
+            renderEmployeesTable(employees) {
+                if (!employees || employees.length === 0) {
+                    this.elements.tableBody.html(`
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <div class="empty-state-icon">📝</div>
+                                <div>No employees found. Add your first employee above!</div>
+                            </td>
+                        </tr>
+                    `);
+                    return;
+                }
+
+                const rows = employees.map(employee => `
+                    <tr>
+                        <td>${this.escapeHtml(employee.ID)}</td>
+                        <td>${this.escapeHtml(employee.FirstName)}</td>
+                        <td>${this.escapeHtml(employee.LastName)}</td>
+                        <td>${this.escapeHtml(employee.Age)}</td>
+                        <td>${this.escapeHtml(employee.Role)}</td>
+                        <td>
+                            <button class="btn btn-warning btn-edit" data-employee-id="${employee.ID}" title="Edit Employee">
+                                ✏️ Edit
+                            </button>
+                            <button class="btn btn-danger btn-delete" data-employee-id="${employee.ID}" title="Delete Employee">
+                                🗑️ Delete
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                this.elements.tableBody.html(rows);
+            }
+
+            showMessage(message, type) {
+                // Clear existing timeout
+                if (this.messageTimeout) {
+                    clearTimeout(this.messageTimeout);
+                }
+
+                const icons = {
+                    success: '✅',
+                    error: '❌',
+                    info: 'ℹ️'
+                };
+
+                const messageHtml = `
+                    <div class="message ${type}">
+                        <span>${icons[type] || ''}</span>
+                        <span>${this.escapeHtml(message)}</span>
+                    </div>
+                `;
+
+                this.elements.messageContainer.html(messageHtml);
+
+                // Auto-hide success and info messages
+                if (type === 'success' || type === 'info') {
+                    this.messageTimeout = setTimeout(() => {
+                        this.elements.messageContainer.find('.message').fadeOut(500, function() {
+                            $(this).remove();
+                        });
+                    }, 5000);
+                }
+            }
+
+            setLoadingState(isLoading) {
+                if (isLoading) {
+                    this.elements.saveButton.prop('disabled', true);
+                    this.elements.saveButtonText.html('<span class="loading-spinner"></span>Saving...');
+                } else {
+                    this.elements.saveButton.prop('disabled', false);
+                    const buttonText = this.isEditMode ? '💾 Update Employee' : '💾 Save Employee';
+                    this.elements.saveButtonText.text(buttonText);
+                }
+            }
+
+            scrollToForm() {
+                $('html, body').animate({
+                    scrollTop: $('.form-section').offset().top - 20
+                }, 500);
+            }
+
+            handleError(message, error) {
+                console.error('❌', message, error);
+
+                let errorMessage = message;
+
+                if (error.xhr) {
+                    const { xhr } = error;
+                    if (xhr.status === 0) {
+                        errorMessage += ': Cannot connect to server. Please check if the API is running.';
+                    } else if (xhr.status === 404) {
+                        errorMessage += ': Resource not found (404)';
+                    } else if (xhr.status === 500) {
+                        errorMessage += ': Server error (500)';
+                    } else if (xhr.responseJSON && xhr.responseJSON.Message) {
+                        errorMessage += ': ' + xhr.responseJSON.Message;
+                    } else if (xhr.responseText) {
+                        errorMessage += ': ' + xhr.responseText;
+                    } else {
+                        errorMessage += `: ${error.textStatus} (${xhr.status})`;
+                    }
+                }
+
+                this.showMessage(errorMessage, 'error');
+            }
+
+            escapeHtml(text) {
+                if (text == null) return '';
+                return $('<div>').text(String(text)).html();
+            }
+        }
+
+        // Initialize the application when DOM is ready
+        $(document).ready(() => {
+            // Configuration - Update this URL to match your API
+            const API_BASE_URL = 'http://localhost:60664/api/newemployee';
+
+            // Create and initialize the employee manager
+            window.employeeManager = new EmployeeManager(API_BASE_URL);
+
+            // Global error handlers
+            $(document).ajaxError((event, xhr, settings, thrownError) => {
+                console.error('🚨 Global AJAX Error:', {
+                    url: settings.url,
+                    type: settings.type,
+                    status: xhr.status,
+                    error: thrownError
+                });
+            });
+
+            window.onerror = (message, source, lineno, colno, error) => {
+                console.error('🚨 JavaScript Error:', { message, source, lineno, colno, error });
+                if (window.employeeManager) {
+                    window.employeeManager.showMessage('❌ An unexpected error occurred. Please check the console.', 'error');
+                }
+            };
+
+            console.log('📋 Enhanced Employee Management System loaded!');
+            console.log('🔧 API Base URL:', API_BASE_URL);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" /> <!-- Loads the Bootstrap CSS file -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Loads jQuery library from a CDN -->
+    <script src="Scripts/bootstrap.min.js"></script> <!-- Loads the Bootstrap JavaScript functionality -->
+</head>
+<style>
+    :root{
+            --primary-color: #2d545e;
+            --primary-light: #3d6570;
+            --primary-dark: #1d3640;
+            --primary-subtle: #e8f1f3;
+            
+            --secondary-color: #4a6fa5;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-size-sm: 0.875rem;  /* Secondary text, captions, labels */
+            --font-size-base: 1rem;/* Body text, paragraph content */
+            --font-size-lg: 1.125rem;/* Subheadings, emphasized body text */
+            --font-size-xl: 1.25rem;/* Section titles, larger buttons */
+            --font-size-2xl: 1.5rem;/* Page titles, hero headings */
+            
+            /* Spacing */
+            --spacing-2: 0.5rem; /* Small gaps between elements */
+            --spacing-4: 1rem;/* Standard padding/margin for components */
+            --spacing-6: 1.5rem;/* Vertical spacing between sections */
+            --spacing-8: 2rem;/* Layout padding, card spacing */
+            --spacing-12: 3rem;/* Large section breaks or grid gaps */
+
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--primary-subtle) 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 1rem 1rem;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+.nav {
+  display: flex;
+  gap: var(--spacing-4);
+  margin: 8px;
+}
+
+a.nav-link:link,
+a.nav-link:visited {
+  color: white;
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  
+}
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  padding-bottom: 4px;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: white;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+    @media (max-width: 600px) {
+        nav {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    /* Top Section */
+    .form-section {
+        background-color: transparent;
+        padding: 50px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    /* Buttons */
+    .btn {
+        font-family: var(--font-family);
+        font-size: var(--font-size-base);
+        border: 1.5px solid var(--primary-color);
+        border-radius: 8px;
+        font-weight: 200;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+        min-width: 100px;
+        padding: 10px 20px;
+        background-color: transparent;
+
+    }
+
+.btn:hover {
+            transform: scale(1.05); /* Nice subtle hover effect */
+    /* Add other hover effects like background-color or box-shadow */
+    background-color: rgba(94, 55, 45, 0.1); /* Subtle background change on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for depth */
+        }
+
+    /* Table styling */
+    .table-section {
+        overflow: hidden;                        /* clip the table inside */
+        padding: var(--spacing-8);
+    }
+
+    table {
+        background-color: transparent;
+        border-collapse: collapse;
+        backdrop-filter: blur(10px);             /* blur whatever is behind */
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        margin-top: 10px;
+        overflow: hidden;
+        border: 1px solid var(--primary-color);
+    }
+
+    td {
+        padding: 12px;
+        border: 1px solid #2d545e;
+        color: #4A3F35;
+        text-align: center;
+        vertical-align: middle;
+        font-size: var(--font-size-base);
+        border-radius: 8px;
+
+    }
+
+    th {
+        padding: 12px;
+        border: 1px solid #2d545e;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+        font-size: var(--font-size-base);
+    }
+
+    tbody tr + tr {
+    border-top: 1px solid rgba(45, 84, 94, 0.1);
+    }
+
+
+    tbody tr:hover {
+    background-color: rgba(45, 84, 94, 0.08);
+    transform: translateY(-2px);
+    }
+
+
+    .edit-btn, .delete-btn {
+        border: none;
+        padding: 6px 12px;
+        margin-right: 5px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+    .edit-btn {
+        background-color: #e0a800;
+        color: #fff;
+    }
+
+        .edit-btn:hover {
+            background-color: #cc9600;
+        }
+
+    .delete-btn {
+        background-color: #c14e5a;
+        color: #fff;
+    }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+    .loading-message {
+        text-align: center;
+        padding: 20px;
+        color: #4A3F35;
+        font-style: italic;
+    }
+
+    .error-message {
+        text-align: center;
+        padding: 20px;
+        color: #c14e5a;
+        background-color: #ffe6e6;
+        border-radius: 8px;
+        margin: 10px 0;
+    }
+</style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Unique Concept</div>
+            <nav class="nav">
+                <a href="employee-list.html" class="nav-link active">Employee List</a>
+                <a href="add-employee.html" class="nav-link">Add Employee</a>
+            </nav>
+        </div>
+    </header>
+
+<main>
+<!-- Intro Message -->
+    <section class="form-section">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h2 style="font-size: var(--font-size-2xl); margin: auto; font-weight: 700;">Employee Management System</h2>
+            <p style="color: #6A5A4D; font-size: var(--font-size-base);">Manage your employee database - view, edit, and delete employee records</p>
+        </div>
+    </section>
+
+<!-- Employee list table section -->
+    <section class="table-section">
+        <div div style="display: flex; justify-content: space-between;">
+        <h2 style="font-size: var(--font-size-2xl); font-weight: 700;">Employee List</h2>
+        <button type="button" class="btn btn-secondary" id="refreshButton"  >Refresh List</button>
+        </div>
+        <div id="loadingMessage" class="loading-message">Loading employees...</div>
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+        <table class="employee-table" id="employeeTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+                <!-- Dynamic content -->
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <!-- copyright, contact info… -->
+</footer>
+    <script>
+    $(document).ready(function () {
+        // Auto-load employee list when page loads
+        loadEmployeeList();
+
+        // ----- LOAD EMPLOYEE LIST FUNCTION -----
+        function loadEmployeeList() {
+            $('#loadingMessage').show();
+            $('#errorMessage').hide();
+            $('#employeeTable').hide();
+
+            $.ajax({
+                url: 'http://localhost:60664/api/newemployee',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $('#employeeTableBody').empty();
+                    $('#loadingMessage').hide();
+
+                    if (data && data.length > 0) {
+                        $.each(data, function (i, employee) {
+                            var row = `
+                                <tr>
+                                    <td>${employee.ID}</td>
+                                    <td>${employee.FirstName}</td>
+                                    <td>${employee.LastName}</td>
+                                    <td>${employee.Age}</td>
+                                    <td>${employee.Role}</td>
+                                    <td>
+                                        <button class="edit-btn" data-id="${employee.ID}">Edit</button>
+                                        <button class="delete-btn" data-id="${employee.ID}">Delete</button>
+                                    </td>
+                                </tr>`;
+                            $('#employeeTableBody').append(row);
+                        });
+                        $('#employeeTable').show();
+                    } else {
+                        $('#errorMessage').text('No employees found.').show();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#loadingMessage').hide();
+                    $('#errorMessage').text('Failed to load employee data. Please check if the API is running.').show();
+                    console.error('Error loading employees:', error);
+                }
+            });
+        }
+
+        // ----- ADD NEW EMPLOYEE BUTTON -----
+        $('#addNewButton').click(function () {
+            window.location.href = 'add-employee.html';
+        });
+
+        // ----- REFRESH BUTTON -----
+        $('#refreshButton').click(function () {
+            loadEmployeeList();
+        });
+
+        // ----- DELETE BUTTON -----
+        $(document).on('click', '.delete-btn', function () {
+            const id = $(this).data('id');
+            const row = $(this).closest('tr');
+            const employeeName = row.find('td:eq(1)').text() + ' ' + row.find('td:eq(2)').text();
+
+            if (confirm(`Are you sure you want to delete ${employeeName}?`)) {
+                $.ajax({
+                    url: `http://localhost:60664/api/newemployee/${id}`,
+                    type: 'DELETE',
+                    success: function () {
+                        alert('Employee deleted successfully!');
+                        loadEmployeeList(); // Reload the list
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Failed to delete employee. Please try again.');
+                        console.error('Error deleting employee:', error);
+                    }
+                });
+            }
+        });
+
+        // ----- EDIT BUTTON (Navigate to Edit Page) -----
+        $(document).on('click', '.edit-btn', function () {
+            const id = $(this).data('id');
+            // Navigate to edit page with employee ID as parameter
+            window.location.href = `edit-employee.html?id=${id}`;
+        });
+    });
+    </script>
+</body>
+</html>
