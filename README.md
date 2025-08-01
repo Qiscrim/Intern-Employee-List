@@ -1,6 +1,6 @@
 # Employee Management System 🧑‍💼📋
 
-A simple web-based Employee Management System built using HTML, CSS, JavaScript (jQuery), and ASP.NET backend. Uses Microsoft SQL Server Management as database for employee list. It features employee listing with pagination, filtering, and sorting.
+A simple web-based Employee Management System built using HTML, CSS (Bootstrap), JavaScript (jQuery), and ASP.NET backend(C#). Uses Microsoft SQL Server Management as database for employee list. It features employee listing with pagination, filtering, and sorting.
 
 ## 🌟 Features
 
