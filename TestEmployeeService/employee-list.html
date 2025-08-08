@@ -1,0 +1,1021 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Management System</title>
+    <meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2d545e;
+            --primary-light: #3d6570;
+            --primary-dark: #1d3640;
+            --primary-subtle: #e8f1f3;
+            --secondary-color: #4a6fa5;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --spacing-2: 0.5rem;
+            --spacing-4: 1rem;
+            --spacing-6: 1.5rem;
+            --spacing-8: 2rem;
+            --spacing-12: 3rem;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--primary-subtle) 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 1rem 1rem;
+            box-shadow: var(--shadow-lg);
+            position: static;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .nav {
+            display: flex;
+            gap: var(--spacing-4);
+            margin: 8px;
+        }
+
+        a.nav-link:link,
+        a.nav-link:visited {
+            color: white;
+            text-decoration: none;
+            font-size: var(--font-size-sm);
+        }
+
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            padding-bottom: 4px;
+        }
+
+            .nav-link::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                bottom: 0;
+                width: 0;
+                height: 2px;
+                background: white;
+                transition: width 0.3s ease, left 0.3s ease;
+            }
+
+            .nav-link:hover::after {
+                width: 100%;
+                left: 0;
+            }
+/* Add this CSS to employee-list.html style section for the admin dashboard link */
+
+.nav-link.admin-only {
+    background: rgba(231, 76, 60, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.nav-link.admin-only:hover {
+    background: rgba(231, 76, 60, 0.2);
+}
+        /* Simple Filter Section */
+        .simple-filters {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+            .filter-item label {
+                font-weight: 600;
+                margin-bottom: 5px;
+                font-size: var(--font-size-sm);
+            }
+
+            .filter-item input,
+            .filter-item select {
+                padding: 8px;
+                border: 1px solid var(--gray-300);
+                border-radius: 4px;
+                font-size: var(--font-size-sm);
+            }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: end;
+            margin-top: 19px; /* Align with input boxes */
+        }
+
+        .btn-simple {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .btn-filter {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-clear {
+            background-color: var(--gray-400);
+            color: white;
+        }
+
+        .btn-simple:hover {
+            opacity: 0.8;
+        }
+
+        /* Top Section */
+        .form-section {
+            background-color: transparent;
+            padding: 30px;
+            text-align: center;
+        }
+
+        /* Table Section */
+        .table-section {
+            padding: 20px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            font-family: var(--font-family);
+            font-size: var(--font-size-base);
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 8px 16px;
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+            .btn:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+        table {
+            background-color: white;
+            border-collapse: collapse;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        th {
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            font-size: var(--font-size-lg);
+            position: relative;
+        }
+
+            /* Sortable column headers */
+            th.sortable {
+                cursor: pointer;
+                user-select: none;
+                transition: background-color 0.2s ease;
+            }
+
+                th.sortable:hover {
+                    background: var(--primary-light);
+                }
+
+        /* Sort indicators */
+        .sort-indicator {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+
+            .sort-indicator.hidden {
+                opacity: 0.3;
+            }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--gray-200);
+            text-align: center;
+            font-size: var(--font-size-base);
+        }
+
+        tbody tr:hover {
+            background-color: var(--gray-100);
+        }
+
+        .edit-btn, .delete-btn {
+            border: none;
+            padding: 4px 8px;
+            margin: 0 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .edit-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .loading-message, .error-message {
+            text-align: center;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 4px;
+        }
+
+        .loading-message {
+            background-color: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .error-message {
+            background-color: #ffe6e6;
+            color: #d63384;
+        }
+
+        .employee-count {
+            color: var(--gray-600);
+            font-size: var(--font-size-sm);
+            margin-bottom: 10px;
+        }
+
+        /* Pagination Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px 0;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .pagination-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+        }
+
+        .page-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .page-size-selector select {
+                padding: 4px 8px;
+                border: 1px solid var(--gray-300);
+                border-radius: 4px;
+                font-size: var(--font-size-sm);
+            }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pagination-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--gray-300);
+            background: white;
+            color: var(--gray-700);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            transition: all 0.2s ease;
+            min-width: 36px;
+            text-align: center;
+        }
+
+            .pagination-btn:hover:not(:disabled) {
+                background: var(--gray-100);
+                border-color: var(--gray-400);
+            }
+
+            .pagination-btn:disabled {
+                background: var(--gray-100);
+                color: var(--gray-400);
+                cursor: not-allowed;
+                border-color: var(--gray-200);
+            }
+
+            .pagination-btn.active {
+                background: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+            }
+
+                .pagination-btn.active:hover {
+                    background: var(--primary-dark);
+                }
+
+        .pagination-text {
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+            margin: 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-item {
+                width: 100%;
+            }
+
+            .sort-indicator {
+                right: 4px;
+                font-size: 0.7em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Replace the header navigation section in employee-list.html (around line 90-97) with this: -->
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Unique Concept</div>
+            <nav class="nav">
+                <a href="employee-list.html" class="nav-link active">Employee List</a>
+                <a href="add-employee.html" class="nav-link">Add Employee</a>
+                <!-- Admin Dashboard link - will be shown/hidden based on user role -->
+                <a href="admin-dashboard.html" id="adminDashboardLink" class="nav-link" style="display: none;">Admin Dashboard</a>
+                <a href="login.html?logout=true" class="nav-link">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Intro Message -->
+        <section class="form-section">
+            <h1 style="font-size: var(--font-size-2xl); font-weight: 700;">Employee Management System</h1>
+            <p style="color: #6A5A4D;">Manage your employee database - view, edit, filter, and sort employee records</p>
+        </section>
+
+        <!-- Simple Filter Section -->
+        <section class="simple-filters">
+            <div class="filter-row">
+                <div class="filter-item">
+                    <label for="searchBox">Search Name:</label>
+                    <input type="text" id="searchBox" placeholder="Type first or last name...">
+                </div>
+
+                <div class="filter-item">
+                    <label for="roleFilter">Filter by Role:</label>
+                    <select id="roleFilter">
+                        <option value="">All Roles</option>
+                    </select>
+                </div>
+
+                <div class="filter-buttons">
+                    <button class="btn-simple btn-filter" onclick="filterEmployees()" id="filterButton">Filter</button>
+                    <button class="btn-simple btn-clear" onclick="clearFilters()">Clear</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Employee Table Section -->
+        <section class="table-section">
+            <div class="table-header">
+                <div>
+                    <h2 style="font-size: var(--font-size-xl); font-weight: 700; margin: 0;">Employee List</h2>
+                    <div class="employee-count" id="employeeCount">Loading...</div>
+                </div>
+                <button type="button" class="btn" onclick="loadEmployees()">Refresh</button>
+            </div>
+
+            <div id="loadingMessage" class="loading-message">Loading employees...</div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <table id="employeeTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="ID">
+                            ID
+                            <span class="sort-indicator hidden">↕</span>
+                        </th>
+                        <th class="sortable" data-column="FirstName">
+                            First Name
+                            <span class="sort-indicator hidden">↕</span>
+                        </th>
+                        <th class="sortable" data-column="LastName">
+                            Last Name
+                            <span class="sort-indicator hidden">↕</span>
+                        </th>
+                        <th class="sortable" data-column="Age">
+                            Age
+                            <span class="sort-indicator hidden">↕</span>
+                        </th>
+                        <th class="sortable" data-column="Role">
+                            Role
+                            <span class="sort-indicator hidden">↕</span>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    <!-- Employee data will go here -->
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container" id="paginationContainer" style="display: none;">
+                <div class="pagination-info">
+                    <div class="page-size-selector">
+                        <label for="pageSize">Show:</label>
+                        <select id="pageSize">
+                            <option value="1">1</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <span>per page</span>
+                    </div>
+                    <div id="paginationInfo">Showing 1-10 of 50 employees</div>
+                </div>
+
+                <div class="pagination-controls">
+                    <button class="pagination-btn" id="firstPageBtn" onclick="goToPage(1)">«</button>
+                    <button class="pagination-btn" id="prevPageBtn" onclick="goToPage(pagination.currentPage - 1)">‹</button>
+
+                    <div id="pageNumbers">
+                        <!-- Page numbers will be generated here -->
+                    </div>
+
+                    <button class="pagination-btn" id="nextPageBtn" onclick="goToPage(pagination.currentPage + 1)">›</button>
+                    <button class="pagination-btn" id="lastPageBtn" onclick="goToPage(pagination.totalPages)">»</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Add this function to employee-list.html to debug authentication issues
+        function debugAuth() {
+            console.log('=== DEBUGGING AUTHENTICATION ===');
+
+            const currentUser = localStorage.getItem('currentUser');
+            const authToken = localStorage.getItem('authToken');
+
+            console.log('Raw currentUser from localStorage:', currentUser);
+            console.log('Raw authToken from localStorage:', authToken);
+
+            if (currentUser) {
+                try {
+                    const parsedUser = JSON.parse(currentUser);
+                    console.log('Parsed user object:', parsedUser);
+                    console.log('User IsAdmin property:', parsedUser.IsAdmin);
+                    console.log('Type of IsAdmin:', typeof parsedUser.IsAdmin);
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                }
+            } else {
+                console.error('No currentUser in localStorage');
+            }
+
+            if (!authToken) {
+                console.error('No authToken in localStorage');
+            }
+
+            console.log('=== END DEBUG ===');
+        }
+
+        // Call this in your checkUserAuth function
+        function checkUserAuth() {
+            debugAuth(); // Add this line for debugging
+
+            const currentUser = localStorage.getItem('currentUser');
+            const authToken = localStorage.getItem('authToken');
+
+            if (!currentUser || !authToken) {
+                console.log('Missing auth data, redirecting to login');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const user = JSON.parse(currentUser);
+                console.log('Current user:', user);
+
+                // Show admin dashboard link only for admin users
+                if (user.IsAdmin) {
+                    $('#adminDashboardLink').show();
+                    console.log('Admin link shown');
+                } else {
+                    $('#adminDashboardLink').hide();
+                    console.log('Admin link hidden');
+                }
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Simple variables to store data
+        let allEmployees = [];        // All employees fetched from the backend (used as the base for filtering)
+        let displayedEmployees = [];  //Display list: Employees currently shown in the table (after filters/search applied)
+        let currentSort = {           // emembers which column is being sorted (ID, Age, etc.) and in what direction (asc, desc, or null).
+            column: null,
+            direction: null // 'asc', 'desc', or null
+        };
+        let pagination = {            // tracks current page, items per page, and total info.
+            currentPage: 1,
+            itemsPerPage: 10,
+            totalPages: 0,
+            totalItems: 0
+        };
+
+
+        // Update the document ready function to call checkUserAuth first
+        $(document).ready(function () {
+            checkUserAuth(); // Add this line first
+            loadEmployees();
+            setupSortHandlers();
+            setupPaginationHandlers();
+        });
+
+    // Setup pagination event handlers
+    function setupPaginationHandlers() {
+        // Page size change handler
+        $('#pageSize').on('change', function() {
+            pagination.itemsPerPage = parseInt($(this).val());
+            pagination.currentPage = 1; // Reset to first page
+            updatePaginationAndDisplay();
+        });
+    }
+
+    // Setup click handlers for sortable columns
+    function setupSortHandlers() {
+        $('.sortable').on('click', function() {
+            let column = $(this).data('column');
+            sortByColumn(column);
+        });
+    }
+
+    // Handle column sorting
+    function sortByColumn(column) {
+        console.log("Sorting by column:", column);
+
+        // Determine new sort direction
+        if (currentSort.column === column) {
+            // Same column clicked - cycle through: asc -> desc -> none
+            if (currentSort.direction === 'asc') {
+                currentSort.direction = 'desc';
+            } else if (currentSort.direction === 'desc') { // Third click: remove sorting
+                currentSort.direction = null;
+                currentSort.column = null;
+            } else {
+                currentSort.direction = 'asc';
+            }
+        } else {
+            // New column clicked - start with ascending
+            currentSort.column = column;
+            currentSort.direction = 'asc';
+        }
+
+        // Apply the sort
+        sortEmployees();
+        updateSortIndicators();
+        updatePaginationAndDisplay();
+    }
+
+    // Sort the displayed employees array
+    function sortEmployees() {
+        if (!currentSort.column || !currentSort.direction) {
+            return; // No sorting needed
+        }
+
+        displayedEmployees.sort(function(a, b) {
+            let valueA = a[currentSort.column];
+            let valueB = b[currentSort.column];
+
+            // Handle numeric columns (ID and Age)
+            if (currentSort.column === 'ID' || currentSort.column === 'Age') {
+                valueA = parseInt(valueA) || 0;
+                valueB = parseInt(valueB) || 0;
+            } else {
+                // Handle text columns (convert to lowercase for case-insensitive sorting)
+                valueA = (valueA || '').toString().toLowerCase();
+                valueB = (valueB || '').toString().toLowerCase();
+            }
+
+            let comparison = 0;
+            if (valueA > valueB) {
+                comparison = 1;
+            } else if (valueA < valueB) {
+                comparison = -1;
+            }
+
+            // Apply direction
+            return currentSort.direction === 'desc' ? comparison * -1 : comparison; //If sorting descending, reverse the result (multiply by -1).
+        });
+    }
+
+    // Update visual sort indicators
+    function updateSortIndicators() {
+        // Reset all indicators
+        $('.sort-indicator').removeClass('hidden').text('↕');
+
+        if (currentSort.column && currentSort.direction) {
+            // Find the active column header
+            let activeHeader = $('th[data-column="' + currentSort.column + '"]');
+            let indicator = activeHeader.find('.sort-indicator');
+
+            // Set the appropriate arrow
+            if (currentSort.direction === 'asc') {
+                indicator.text('↑');
+            } else if (currentSort.direction === 'desc') {
+                indicator.text('↓');
+            }
+        } else {
+            // No active sort - make all indicators subtle
+            $('.sort-indicator').addClass('hidden');
+        }
+    }
+
+    // STEP 1: Load all employees from database
+    function loadEmployees() {
+        console.log("Loading employees...");
+
+        // Show loading message
+        $('#loadingMessage').show();
+        $('#errorMessage').hide();
+        $('#employeeTable').hide();
+        $('#paginationContainer').hide(); // Hide pagination during loading
+
+        // Get data from API
+        $.ajax({
+            url: 'http://localhost:57696/api/testemployee',
+            method: 'GET',
+            success: function (data) {
+                console.log("Got employees:", data);
+
+                // Store the data received from the API into allEmployees
+                // If data is null or undefined, use an empty array to prevent errors
+                allEmployees = data || [];
+                displayedEmployees = allEmployees.slice(); // Create a copy
+
+                // Reset pagination to first page when loading new data
+                pagination.currentPage = 1;
+
+                // Update the page
+                updateRoleFilter();
+
+                // Apply current sort if any
+                if (currentSort.column && currentSort.direction) {
+                    sortEmployees();
+                }
+
+                // Use the centralized function to update everything
+                updatePaginationAndDisplay();
+                updateSortIndicators();
+
+                $('#loadingMessage').hide();
+            },
+            error: function () {
+                $('#loadingMessage').hide();
+                $('#errorMessage').text('Could not load employees. Check if API is running.').show();
+            }
+        });
+    }
+
+    // STEP 2: Fill the role dropdown with available roles
+    function updateRoleFilter() {
+        let roles = [];
+
+        // Get all unique roles
+        for (let i = 0; i < allEmployees.length; i++) {
+            let role = allEmployees[i].Role;
+            if (roles.indexOf(role) === -1) {  // If role not already in list
+                roles.push(role);
+            }
+        }
+
+        // Sort roles alphabetically
+        roles.sort();
+
+        // Update dropdown
+        let dropdown = $('#roleFilter');
+        dropdown.find('option:not(:first)').remove();  // Keep "All Roles" option
+
+        for (let i = 0; i < roles.length; i++) {
+            dropdown.append('<option value="' + roles[i] + '">' + roles[i] + '</option>');
+        }
+    }
+
+    // STEP 3: Filter employees based on search box and role dropdown
+    function filterEmployees() {
+        console.log("Filtering employees...");
+
+        // Get what user typed/selected
+        let searchText = $('#searchBox').val().toLowerCase();
+        let selectedRole = $('#roleFilter').val();
+
+        // Start with all employees
+        displayedEmployees = [];
+
+        // Check each employee
+        for (let i = 0; i < allEmployees.length; i++) {
+            let employee = allEmployees[i];
+            let showThisEmployee = true; //condition checker
+
+            // Check name search (matches full name)
+            if (searchText !== '') {
+                let fullName = (employee.FirstName + ' ' + employee.LastName).toLowerCase();
+
+                // If full name doesn't contain search text, hide employee
+                if (!fullName.includes(searchText)) {
+                    showThisEmployee = false;
+                }
+            }
+
+            // Check role filter
+            if (selectedRole !== '' && employee.Role !== selectedRole) {
+                showThisEmployee = false;
+            }
+
+            // If employee passes all filters, add to display list
+            if (showThisEmployee) {
+                displayedEmployees.push(employee);
+            }
+        }
+
+        // Reset to first page when filtering
+        pagination.currentPage = 1;
+
+        // Apply current sort to filtered results
+        if (currentSort.column && currentSort.direction) {
+            sortEmployees();
+        }
+
+        // Update the table
+        updatePaginationAndDisplay();
+    }
+
+    // STEP 4: Show employees in the table (with pagination)
+    function showEmployees() {
+        let tableBody = $('#employeeTableBody');
+        tableBody.empty();  // Clear existing rows
+
+        // Calculate pagination slice
+        let startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
+        let endIndex = startIndex + pagination.itemsPerPage;
+        let pageEmployees = displayedEmployees.slice(startIndex, endIndex);// Get only employees for current page
+
+        // Loop through each employee on the current page and create a table row
+        for (let i = 0; i < pageEmployees.length; i++) {
+            let emp = pageEmployees[i];
+
+            let row = '<tr>' +
+                '<td>' + emp.ID + '</td>' +
+                '<td>' + emp.FirstName + '</td>' +
+                '<td>' + emp.LastName + '</td>' +
+                '<td>' + emp.Age + '</td>' +
+                '<td>' + emp.Role + '</td>' +
+                '<td>' +
+                    '<button class="edit-btn" onclick="editEmployee(' + emp.ID + ')">Edit</button>' +
+                    '<button class="delete-btn" onclick="deleteEmployee(' + emp.ID + ', \'' + emp.FirstName + ' ' + emp.LastName + '\')">Delete</button>' +
+                '</td>' +
+            '</tr>';
+
+            tableBody.append(row);
+        }
+
+        $('#employeeTable').show();
+        $('#paginationContainer').show();
+    }
+
+    // Calculate and update pagination
+    function updatePagination() {
+        pagination.totalItems = displayedEmployees.length;
+        pagination.totalPages = Math.ceil(pagination.totalItems / pagination.itemsPerPage);
+
+        // Ensure current page is valid
+        if (pagination.currentPage > pagination.totalPages && pagination.totalPages > 0) {
+            pagination.currentPage = pagination.totalPages;
+        }
+        if (pagination.currentPage < 1) {
+            pagination.currentPage = 1;
+        }
+    }
+
+    // Update pagination display elements
+    function updatePaginationDisplay() {
+        // Calculate the starting item number for the current page
+        // Example: Page 2, 10 items per page → startItem = 11
+        let startItem = (pagination.currentPage - 1) * pagination.itemsPerPage + 1;
+        // Calculate the ending item number for the current page
+        // Use Math.min to avoid going past the total number of items
+        let endItem = Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalItems);
+
+        // Determine what text to show based on whether there are items or not
+        let infoText = pagination.totalItems === 0
+            ? 'No employees found'
+            : `Showing ${startItem}-${endItem} of ${pagination.totalItems} employees`; // Pagination summary
+
+        // Update the info text element in the HTML
+        $('#paginationInfo').text(infoText);
+
+        // Disable "First" and "Previous" buttons if we're on the first page
+        $('#firstPageBtn, #prevPageBtn').prop('disabled', pagination.currentPage === 1);
+        // Disable "Next" and "Last" buttons if we're on the last page or no pages at all
+        $('#nextPageBtn, #lastPageBtn').prop('disabled', pagination.currentPage === pagination.totalPages || pagination.totalPages === 0);
+
+        // Generate page numbers
+        generatePageNumbers();
+    }
+
+    // Generate page number buttons
+    function generatePageNumbers() {
+        let pageNumbersContainer = $('#pageNumbers'); // Get the container where page buttons will be shown
+        pageNumbersContainer.empty(); // Clear any existing buttons before re-adding
+
+        if (pagination.totalPages <= 1) return;
+
+        let startPage = Math.max(1, pagination.currentPage - 1);
+        let endPage = Math.min(pagination.totalPages, pagination.currentPage + 1);
+
+        // Add ellipsis if needed at the beginning
+        if (startPage > 1) {
+            pageNumbersContainer.append('<button class="pagination-btn" onclick="goToPage(1)">1</button>');
+            if (startPage > 2) {
+                pageNumbersContainer.append('<span class="pagination-text">...</span>');
+            }
+        }
+
+        // Add page numbers
+        for (let i = startPage; i <= endPage; i++) {
+            let activeClass = i === pagination.currentPage ? ' active' : '';
+            pageNumbersContainer.append(`<button class="pagination-btn${activeClass}" onclick="goToPage(${i})">${i}</button>`);
+        }
+
+        // Add ellipsis if needed at the end
+        if (endPage < pagination.totalPages) {
+            if (endPage < pagination.totalPages - 1) {
+                pageNumbersContainer.append('<span class="pagination-text">...</span>');
+            }
+            pageNumbersContainer.append(`<button class="pagination-btn" onclick="goToPage(${pagination.totalPages})">${pagination.totalPages}</button>`);
+        }
+    }
+
+    // Navigate to specific page
+    function goToPage(pageNumber) {
+        if (pageNumber >= 1 && pageNumber <= pagination.totalPages) {
+            pagination.currentPage = pageNumber;
+            showEmployees();
+            updatePaginationDisplay();
+        }
+    }
+
+    // Combined function to update pagination and display
+    function updatePaginationAndDisplay() {
+        updatePagination();
+        showEmployees();
+        updatePaginationDisplay();
+        updateCount();
+    }
+
+    // STEP 5: Update employee count display
+    function updateCount() {
+        let message = 'Showing ' + displayedEmployees.length + ' of ' + allEmployees.length + ' employees';
+        $('#employeeCount').text(message);
+    }
+
+    // STEP 6: Clear all filters
+    function clearFilters() {
+        $('#searchBox').val('');
+        $('#roleFilter').val('');
+
+        // Reset to all employees
+        displayedEmployees = allEmployees.slice(); // Create a copy
+        // Reset to first page
+        pagination.currentPage = 1;
+
+        // Reapply current sort if any
+        if (currentSort.column && currentSort.direction) {
+            sortEmployees();
+        }
+
+/*        showEmployees();
+        updateCount();*/
+        // Use centralized function
+        updatePaginationAndDisplay();  // CHANGE: was showEmployees() and updateCount()
+
+    }
+
+    // Trigger filtering only when the button is clicked
+    $('#filterButton').on('click', function () {
+        filterEmployees();
+    });
+
+    // STEP 9: Edit employee function
+    function editEmployee(id) {
+        window.location.href = 'edit-employee.html?id=' + id;
+    }
+
+    // STEP 10: Delete employee function
+    function deleteEmployee(id, name) {
+        if (confirm('Delete ' + name + '?')) {
+            $.ajax({
+                url: 'http://localhost:57696/api/testemployee/' + id,
+                method: 'DELETE',
+                success: function() {
+                    alert('Employee deleted!');
+                    loadEmployees();  // Reload the list
+                },
+                error: function() {
+                    alert('Could not delete employee.');
+                }
+            });
+        }
+    }
+    </script>
+</body>
+</html>

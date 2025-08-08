@@ -1,0 +1,10 @@
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\bin\Debug\TestEmployeeDataAccess.dll.config
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\bin\Debug\TestEmployeeDataAccess.dll
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\bin\Debug\TestEmployeeDataAccess.pdb
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\bin\Debug\EntityFramework.dll
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\bin\Debug\EntityFramework.SqlServer.dll
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\bin\Debug\EntityFramework.xml
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\bin\Debug\EntityFramework.SqlServer.xml
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\obj\Debug\TestEmployeeDataAccess.csprojResolveAssemblyReference.cache
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\obj\Debug\TestEmployeeDataAccess.dll
+c:\users\user\documents\visual studio 2015\Projects\TestEmployeeService\TestEmployeeDataAccess\obj\Debug\TestEmployeeDataAccess.pdb

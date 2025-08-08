@@ -1,0 +1,735 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Employee - Employee Management System</title>
+    <meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2d545e;
+            --primary-light: #3d6570;
+            --primary-dark: #1d3640;
+            --primary-subtle: #e8f1f3;
+            --secondary-color: #4a6fa5;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-size-sm: 0.875rem; /* Secondary text, captions, labels */
+            --font-size-base: 1rem; /* Body text, paragraph content */
+            --font-size-lg: 1.125rem; /* Subheadings, emphasized body text */
+            --font-size-xl: 1.25rem; /* Section titles, larger buttons */
+            --font-size-2xl: 1.5rem; /* Page titles, hero headings */
+            /* Spacing */
+            --spacing-2: 0.5rem; /* Small gaps between elements */
+            --spacing-4: 1rem; /* Standard padding/margin for components */
+            --spacing-6: 1.5rem; /* Vertical spacing between sections */
+            --spacing-8: 2rem; /* Layout padding, card spacing */
+            --spacing-12: 3rem; /* Large section breaks or grid gaps */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--primary-subtle) 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 1rem 1rem;
+            box-shadow: var(--shadow-lg);
+            position: static;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .nav {
+            display: flex;
+            gap: var(--spacing-4);
+            margin: 8px;
+            font-size: var(--font-size-sm);
+        }
+
+        a.nav-link:link,
+        a.nav-link:visited {
+            color: white;
+            text-decoration: none;
+            font-size: var(--font-size-sm);
+        }
+
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            padding-bottom: 4px;
+        }
+
+            .nav-link::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                bottom: 0;
+                width: 0;
+                height: 2px;
+                background: white;
+                transition: width 0.3s ease, left 0.3s ease;
+            }
+
+            .nav-link:hover::after {
+                width: 100%;
+                left: 0;
+            }
+
+        /* Form Section */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            margin: 50px;
+            box-shadow: var(--shadow-xl);
+            backdrop-filter: blur(10px);
+            color: var(--gray-800);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 8px;
+                color: var(--gray-800);
+                font-size: var(--font-size-base);
+            }
+
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 12px 16px;
+                border: 2px solid var(--gray-300);
+                border-radius: 8px;
+                font-size: var(--font-size-base);
+                transition: all 0.3s ease;
+                background: white;
+                box-sizing: border-box;
+            }
+
+                .form-group input:focus, .form-group select:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 3px rgba(45, 84, 94, 0.1);
+                }
+
+        /* Role Selection Styles */
+        .role-selection {
+            position: relative;
+        }
+
+        .role-toggle {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .toggle-option {
+            padding: 8px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+            .toggle-option.active {
+                background: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+            }
+
+            .toggle-option:hover:not(.active) {
+                background: var(--gray-100);
+                border-color: var(--gray-400);
+            }
+
+        #customRoleInput {
+            display: none;
+        }
+
+        .role-suggestion {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid var(--gray-300);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gray-200);
+            transition: background-color 0.2s ease;
+        }
+
+            .suggestion-item:hover {
+                background-color: var(--gray-100);
+            }
+
+            .suggestion-item:last-child {
+                border-bottom: none;
+            }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: var(--font-size-base);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-md);
+            }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #D35C69 0%, #c14e5a 100%);
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(135deg, #c14e5a 0%, #b0434f 100%);
+            }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #9C6B78 0%, #875a65 100%);
+            color: white;
+        }
+
+            .btn-secondary:hover {
+                background: linear-gradient(135deg, #875a65 0%, #704d57 100%);
+            }
+
+        .btn-back {
+            background: linear-gradient(135deg, #E97451 0%, #d86444 100%);
+            color: white;
+        }
+
+            .btn-back:hover {
+                background: linear-gradient(135deg, #d86444 0%, #c55a3e 100%);
+            }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+            .form-header h2 {
+                color: var(--gray-800);
+                margin-bottom: 12px;
+                font-weight: 700;
+            }
+
+            .form-header p {
+                color: var(--gray-600);
+                margin: 0;
+            }
+
+        .input-hint {
+            font-size: var(--font-size-sm);
+            color: var(--gray-500);
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .required {
+            color: #c14e5a;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, rgba(212, 237, 218, 0.9), rgba(195, 230, 203, 0.9));
+            color: #155724;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #c3e6cb;
+            backdrop-filter: blur(5px);
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, rgba(248, 215, 218, 0.9), rgba(245, 198, 203, 0.9));
+            color: #721c24;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #f5c6cb;
+            backdrop-filter: blur(5px);
+            font-weight: 500;
+        }
+
+        .loading-roles {
+            color: var(--gray-500);
+            font-style: italic;
+            padding: 8px 0;
+        }
+
+        @media (max-width: 768px) {
+            .form-section {
+                margin: 20px;
+                padding: 24px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                margin-right: 0;
+                margin-bottom: 8px;
+            }
+
+            .role-toggle {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Unique Concept</div>
+            <nav class="nav">
+                <a href="employee-list.html" class="nav-link">Employee List</a>
+                <a href="add-employee.html" class="nav-link active">Add Employee</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Add Employee Form -->
+    <div class="container">
+        <section class="form-section">
+            <div class="form-header">
+                <h2 style="font-size: var(--font-size-2xl);">Add New Employee</h2>
+                <p style="font-size: var(--font-size-base);">Fill in the details below to add a new employee to the system</p>
+            </div>
+
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <form id="addEmployeeForm">
+                <div class="form-group">
+                    <label for="firstName">First Name <span class="required">*</span></label>
+                    <input type="text" id="firstName" name="firstName" required maxlength="50" />
+                    <div class="input-hint">Enter the employee's first name</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name <span class="required">*</span></label>
+                    <input type="text" id="lastName" name="lastName" required maxlength="50" />
+                    <div class="input-hint">Enter the employee's last name</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age <span class="required">*</span></label>
+                    <input type="number" id="age" name="age" required min="16" max="120" />
+                    <div class="input-hint">Age must be between 16 and 120</div>
+                </div>
+
+                <div class="form-group role-selection">
+                    <label>Role <span class="required">*</span></label>
+
+                    <div class="role-toggle">
+                        <div class="toggle-option active" data-mode="existing">Choose Existing</div>
+                        <div class="toggle-option" data-mode="custom">Add New Role</div>
+                    </div>
+
+                    <select id="roleSelect" name="roleSelect" required>
+                        <option value="">Loading roles...</option>
+                    </select>
+
+                    <input type="text" id="customRoleInput" name="customRoleInput" maxlength="100"
+                           placeholder="Enter new role..." />
+
+                    <div class="input-hint" id="roleHint">
+                        Select from existing roles or create a new one
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary" id="submitButton">
+                        <span id="submitText">Add Employee</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="clearButton">
+                        Clear Form
+                    </button>
+                    <button type="button" class="btn btn-back" id="cancelButton">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script>
+    $(document).ready(function () {
+        let isSubmitting = false;
+        let existingRoles = [];
+        let currentMode = 'existing'; // 'existing' or 'custom'
+
+        // Load existing roles on page load
+        loadExistingRoles();
+
+        // ----- LOAD EXISTING ROLES -----
+        function loadExistingRoles() {
+            $.ajax({
+                url: 'http://localhost:57696/api/testemployee',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Extract unique roles from employee data
+                    existingRoles = [...new Set(data.map(emp => emp.Role))].sort();
+                    populateRoleDropdown();
+                },
+                error: function (xhr, status, error) {
+                    console.warn('Could not load existing roles:', error);
+                    // Fallback to common roles if API fails
+                    existingRoles = [
+                        'Manager', 'Developer', 'Designer', 'Analyst', 'Sales Representative',
+                        'Marketing Specialist', 'HR Specialist', 'Accountant', 'Administrator',
+                        'Customer Service', 'Project Manager', 'Quality Assurance', 'Intern'
+                    ].sort();
+                    populateRoleDropdown();
+                }
+            });
+        }
+
+        // ----- POPULATE ROLE DROPDOWN -----
+        function populateRoleDropdown() {
+            const $roleSelect = $('#roleSelect');
+            $roleSelect.empty();
+
+            // Add default option
+            $roleSelect.append('<option value="">Select a role...</option>');
+
+            // Add existing roles
+            existingRoles.forEach(role => {
+                $roleSelect.append(`<option value="${role}">${role}</option>`);
+            });
+
+            // Add "Other" option for custom entry
+            $roleSelect.append('<option value="__custom__">+ Add New Role</option>');
+        }
+
+        // ----- ROLE MODE TOGGLE -----
+        $('.toggle-option').click(function() {
+            const mode = $(this).data('mode');
+            currentMode = mode;
+
+            // Update toggle appearance
+            $('.toggle-option').removeClass('active');
+            $(this).addClass('active');
+
+            // Show/hide appropriate input
+            if (mode === 'existing') {
+                $('#roleSelect').show().prop('required', true);
+                $('#customRoleInput').hide().prop('required', false);
+                $('#roleHint').text('Select from existing roles in your organization');
+            } else {
+                $('#roleSelect').hide().prop('required', false);
+                $('#customRoleInput').show().prop('required', true).focus();
+                $('#roleHint').text('Enter a new role title (will be added to the role list)');
+            }
+        });
+
+        // ----- ROLE SELECT CHANGE -----
+        $('#roleSelect').change(function() {
+            if ($(this).val() === '__custom__') {
+                // Switch to custom mode
+                $('.toggle-option[data-mode="custom"]').click();
+            }
+        });
+
+        // ----- FORM SUBMIT (ADD NEW EMPLOYEE) -----
+        $('#addEmployeeForm').submit(function (e) {
+            e.preventDefault();
+
+            // Prevent double submission
+            if (isSubmitting) return;
+
+            // Determine the role value based on current mode
+            let roleValue;
+            if (currentMode === 'existing') {
+                roleValue = $('#roleSelect').val();
+                if (!roleValue || roleValue === '__custom__') {
+                    showError('Please select a role or switch to "Add New Role" mode.');
+                    return;
+                }
+            } else {
+                roleValue = $('#customRoleInput').val().trim();
+                if (!roleValue) {
+                    showError('Please enter a role name.');
+                    return;
+                }
+            }
+
+            // Get form data and validate
+            const employeeData = {
+                FirstName: $('#firstName').val().trim(),
+                LastName: $('#lastName').val().trim(),
+                Age: parseInt($('#age').val()),
+                Role: roleValue
+            };
+
+            // Client-side validation
+            if (!validateForm(employeeData)) {
+                return;
+            }
+
+            // Show loading state
+            isSubmitting = true;
+            $('#submitButton').prop('disabled', true);
+            $('#submitText').text('Adding Employee...');
+            hideMessages();
+
+            $.ajax({
+                url: 'http://localhost:57696/api/testemployee',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(employeeData),
+                success: function (response) {
+                    showSuccess(`Employee "${employeeData.FirstName} ${employeeData.LastName}" has been added successfully with role "${employeeData.Role}"!`);
+                    $('#addEmployeeForm')[0].reset();
+
+                    // Reset to existing role mode
+                    $('.toggle-option[data-mode="existing"]').click();
+
+                    // Reload roles to include the new one if it was custom
+                    if (currentMode === 'custom' && !existingRoles.includes(employeeData.Role)) {
+                        loadExistingRoles();
+                    }
+
+                    // Optionally redirect after a delay
+                    setTimeout(function() {
+                        if (confirm('Employee added successfully! Would you like to go back to the employee list?')) {
+                            window.location.href = 'employee-list.html';
+                        }
+                    }, 1500);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error adding employee:', error);
+
+                    let errorMsg = 'Failed to add employee. ';
+                    if (xhr.status === 400) {
+                        errorMsg += 'Please check your input data.';
+                    } else if (xhr.status === 0) {
+                        errorMsg += 'Unable to connect to the server. Please check if the API is running.';
+                    } else {
+                        errorMsg += 'Please try again.';
+                    }
+
+                    showError(errorMsg);
+                },
+                complete: function() {
+                    // Reset loading state
+                    isSubmitting = false;
+                    $('#submitButton').prop('disabled', false);
+                    $('#submitText').text('Add Employee');
+                }
+            });
+        });
+
+        // ----- FORM VALIDATION -----
+        function validateForm(data) {
+            hideMessages();
+
+            // Check required fields
+            if (!data.FirstName) {
+                showError('First name is required.');
+                $('#firstName').focus();
+                return false;
+            }
+
+            if (!data.LastName) {
+                showError('Last name is required.');
+                $('#lastName').focus();
+                return false;
+            }
+
+            if (!data.Role) {
+                showError('Role is required.');
+                if (currentMode === 'existing') {
+                    $('#roleSelect').focus();
+                } else {
+                    $('#customRoleInput').focus();
+                }
+                return false;
+            }
+
+            // Validate age
+            if (isNaN(data.Age) || data.Age < 16 || data.Age > 120) {
+                showError('Please enter a valid age between 16 and 120.');
+                $('#age').focus();
+                return false;
+            }
+
+            // Check field lengths
+            if (data.FirstName.length > 50) {
+                showError('First name cannot exceed 50 characters.');
+                $('#firstName').focus();
+                return false;
+            }
+
+            if (data.LastName.length > 50) {
+                showError('Last name cannot exceed 50 characters.');
+                $('#lastName').focus();
+                return false;
+            }
+
+            if (data.Role.length > 100) {
+                showError('Role cannot exceed 100 characters.');
+                if (currentMode === 'custom') {
+                    $('#customRoleInput').focus();
+                }
+                return false;
+            }
+
+            return true;
+        }
+
+        // ----- CLEAR FORM BUTTON -----
+        $('#clearButton').click(function () {
+            if (confirm('Are you sure you want to clear all fields?')) {
+                $('#addEmployeeForm')[0].reset();
+                $('.toggle-option[data-mode="existing"]').click();
+                hideMessages();
+                $('#firstName').focus();
+            }
+        });
+
+        // ----- CANCEL BUTTON -----
+        $('#cancelButton').click(function () {
+            const hasData = $('#firstName').val() || $('#lastName').val() || $('#age').val() ||
+                           $('#roleSelect').val() || $('#customRoleInput').val();
+
+            if (hasData) {
+                if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
+                    window.location.href = 'employee-list.html';
+                }
+            } else {
+                window.location.href = 'employee-list.html';
+            }
+        });
+
+        // ----- MESSAGE FUNCTIONS -----
+        function showSuccess(message) {
+            $('#successMessage').text(message).show();
+            $('#errorMessage').hide();
+            $('html, body').animate({ scrollTop: 0 }, 500);
+        }
+
+        function showError(message) {
+            $('#errorMessage').text(message).show();
+            $('#successMessage').hide();
+            $('html, body').animate({ scrollTop: 0 }, 500);
+        }
+
+        function hideMessages() {
+            $('#successMessage').hide();
+            $('#errorMessage').hide();
+        }
+
+        // ----- PREVENT ACCIDENTAL PAGE LEAVE -----
+        let formChanged = false;
+
+        $('#addEmployeeForm input, #addEmployeeForm select').on('input change', function() {
+            formChanged = true;
+        });
+
+        $(window).on('beforeunload', function(e) {
+            if (formChanged && !isSubmitting) {
+                e.preventDefault();
+                return 'You have unsaved changes. Are you sure you want to leave?';
+            }
+        });
+
+        // Reset form changed flag when form is submitted successfully
+        $('#addEmployeeForm').on('submit', function() {
+            if (isSubmitting) {
+                formChanged = false;
+            }
+        });
+
+        // Focus on first input when page loads
+        $('#firstName').focus();
+    });
+    </script>
+</body>
+</html>

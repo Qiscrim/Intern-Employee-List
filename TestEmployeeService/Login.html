@@ -1,0 +1,639 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Employee Management System</title>
+    <meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2d545e;
+            --primary-light: #3d6570;
+            --primary-dark: #1d3640;
+            --primary-subtle: #e8f1f3;
+            --secondary-color: #4a6fa5;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --spacing-2: 0.5rem;
+            --spacing-4: 1rem;
+            --spacing-6: 1.5rem;
+            --spacing-8: 2rem;
+            --spacing-12: 3rem;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 50%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-4);
+        }
+        /* Animated background elements */
+        .bg-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+            .shape:nth-child(1) {
+                width: 80px;
+                height: 80px;
+                top: 20%;
+                left: 20%;
+                animation-delay: 0s;
+            }
+
+            .shape:nth-child(2) {
+                width: 120px;
+                height: 120px;
+                top: 60%;
+                right: 20%;
+                animation-delay: 7s;
+            }
+
+            .shape:nth-child(3) {
+                width: 60px;
+                height: 60px;
+                bottom: 20%;
+                left: 10%;
+                animation-delay: 3s;
+            }
+
+            .shape:nth-child(4) {
+                width: 100px;
+                height: 100px;
+                top: 10%;
+                right: 10%;
+                animation-delay: 10s;
+            }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.5;
+            }
+
+            33% {
+                transform: translateY(-20px) rotate(120deg);
+                opacity: 0.8;
+            }
+
+            66% {
+                transform: translateY(20px) rotate(240deg);
+                opacity: 0.3;
+            }
+        }
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .auth-header h2 {
+            color: var(--gray-800);
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: var(--font-size-xl);
+        }
+
+        .auth-header p {
+            color: var(--gray-600);
+            margin: 0;
+            font-size: var(--font-size-sm);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 6px;
+                color: var(--gray-800);
+                font-size: var(--font-size-sm);
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 12px 16px;
+                border: 2px solid var(--gray-300);
+                border-radius: 8px;
+                font-size: var(--font-size-base);
+                transition: all 0.3s ease;
+                background: white;
+                box-sizing: border-box;
+            }
+
+                .form-group input:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 3px rgba(45, 84, 94, 0.1);
+                }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            cursor: pointer;
+            padding: 4px;
+            font-size: var(--font-size-sm);
+        }
+
+            .toggle-password:hover {
+                color: var(--primary-color);
+            }
+
+        .required {
+            color: var(--danger-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: var(--font-size-base);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-md);
+            }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+            .btn-secondary:hover {
+                background: var(--primary-color);
+                color: white;
+            }
+
+        .success-message {
+            background: linear-gradient(135deg, rgba(212, 237, 218, 0.9), rgba(195, 230, 203, 0.9));
+            color: #155724;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, rgba(248, 215, 218, 0.9), rgba(245, 198, 203, 0.9));
+            color: #721c24;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .auth-links {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-200);
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+        }
+
+            .auth-links a {
+                color: var(--primary-color);
+                text-decoration: none;
+                font-weight: 500;
+                font-size: var(--font-size-sm);
+            }
+
+                .auth-links a:hover {
+                    text-decoration: underline;
+                }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: var(--font-size-sm);
+        }
+
+            .remember-me label {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                font-weight: normal;
+            }
+
+            .remember-me input[type="checkbox"] {
+                margin-right: 8px;
+                width: auto;
+            }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: var(--font-size-sm);
+        }
+
+            .forgot-password:hover {
+                text-decoration: underline;
+            }
+
+        .logout-message {
+            background: linear-gradient(135deg, rgba(255, 243, 205, 0.9), rgba(252, 237, 178, 0.9));
+            color: #8a6914;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ffeaa7;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 24px;
+                margin: var(--spacing-2);
+            }
+
+            .logo {
+                font-size: var(--font-size-2xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="logo">Unique Concept</div>
+            <h2>Welcome Back</h2>
+            <p>Sign in to your account to continue</p>
+        </div>
+
+        <div id="logoutMessage" class="logout-message" style="display: none;">
+            You have been successfully logged out.
+        </div>
+
+        <div id="successMessage" class="success-message" style="display: none;"></div>
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username <span class="required">*</span></label>
+                <input type="text" id="username" name="username" required
+                       placeholder="Enter your username" autocomplete="username" />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <div class="password-input-container">
+                    <input type="password" id="password" name="password" required
+                           placeholder="Enter your password" autocomplete="current-password" />
+                    <button type="button" class="toggle-password" id="togglePassword"></button>
+                </div>
+            </div>
+
+ <!--           <div class="remember-me">
+                <label>
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot password?</a>
+            </div>--> 
+
+            <button type="submit" class="btn btn-primary" id="submitButton">
+                <span id="submitText">Sign In</span>
+            </button>
+        </form>
+
+        <div class="auth-links">
+            <p>Don't have an account? <a href="register.html">Create account</a></p>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function () {
+        let isSubmitting = false;
+
+        // Check for logout parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('logout') === 'true') {
+            $('#logoutMessage').show();
+            // Clear any stored authentication data
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            sessionStorage.clear();
+        }
+
+        // Password visibility toggle
+        $('#togglePassword').click(function () {
+            const passwordField = $('#password');
+            const type = passwordField.attr('type') === 'password' ? 'text' : 'password';
+            //passwordField.attr('type', type);
+            //$(this).text(type === 'password' ? '👁️' : '🙈');
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                //toggle.text('🔒');
+            } else {
+                passwordField.attr('type', 'password');
+                //toggle.text('👁️');
+            }
+        });
+
+        // Load remembered username if available
+        const rememberedUsername = localStorage.getItem('rememberedUsername');
+        if (rememberedUsername) {
+            $('#username').val(rememberedUsername);
+            $('#rememberMe').prop('checked', true);
+            $('#password').focus();
+        } else {
+            $('#username').focus();
+        }
+
+        // Form submission
+        $('#loginForm').submit(function (e) {
+            e.preventDefault();
+
+            if (isSubmitting) return;
+
+            const loginData = {
+                Username: $('#username').val().trim(),
+                Password: $('#password').val(),
+                RememberMe: $('#rememberMe').is(':checked')
+            };
+
+            if (!validateForm(loginData)) {
+                return;
+            }
+
+            isSubmitting = true;
+            $('#submitButton').prop('disabled', true);
+            $('#submitText').html('<span class="loading-spinner"></span>Signing In...');
+            hideMessages();
+
+            // Simulate API call (you'll need to implement the actual API endpoint)
+            $.ajax({
+                url: 'http://localhost:57696/api/users/login',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Username: loginData.Username,
+                    Password: loginData.Password
+                }),
+                // In Login.html, replace the success callback in the AJAX call (around line 140-155) with this:
+
+                // Replace the success callback in Login.html AJAX call with this fixed version:
+
+                success: function (response) {
+                    console.log('Login response:', response); // Debug log
+
+                    // Store authentication data - FIXED: Use correct property names
+                    if (response.Token) {
+                        localStorage.setItem('authToken', response.Token);
+                        console.log('Token stored:', response.Token);
+                    } else {
+                        console.error('No token in response');
+                    }
+
+                    if (response.User) {
+                        localStorage.setItem('currentUser', JSON.stringify(response.User));
+                        console.log('User stored:', response.User);
+                    } else {
+                        console.error('No user data in response');
+                    }
+
+                    // Handle remember me
+                    if (loginData.RememberMe) {
+                        localStorage.setItem('rememberedUsername', loginData.Username);
+                    } else {
+                        localStorage.removeItem('rememberedUsername');
+                    }
+
+                    showSuccess('Login successful! Redirecting...');
+
+                    // Redirect to employee list for all users
+                    setTimeout(function () {
+                        window.location.href = 'employee-list.html';
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Login error:', error);
+
+                    let errorMsg = 'Login failed. ';
+                    if (xhr.status === 401) {
+                        errorMsg += 'Invalid username or password.';
+                    } else if (xhr.status === 400) {
+                        errorMsg += 'Please check your credentials.';
+                    } else if (xhr.status === 0) {
+                        errorMsg += 'Unable to connect to the server. Please check if the API is running.';
+                    } else {
+                        errorMsg += 'Please try again.';
+                    }
+
+                    showError(errorMsg);
+
+                    // Clear password field on error
+                    $('#password').val('').focus();
+                },
+                complete: function () {
+                    isSubmitting = false;
+                    $('#submitButton').prop('disabled', false);
+                    $('#submitText').text('Sign In');
+                }
+            });
+        });
+
+        // Form validation
+        function validateForm(data) {
+            hideMessages();
+
+            if (!data.Username || data.Username.length === 0) {
+                showError('Please enter your username.');
+                $('#username').focus();
+                return false;
+            }
+
+            if (!data.Password || data.Password.length === 0) {
+                showError('Please enter your password.');
+                $('#password').focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        // Enter key handling
+        $('#password').keypress(function(e) {
+            if (e.which == 13) { // Enter key
+                $('#loginForm').submit();
+            }
+        });
+
+        // Message functions
+        function showSuccess(message) {
+            $('#successMessage').html(message).show();
+            $('#errorMessage').hide();
+            $('#logoutMessage').hide();
+        }
+
+        function showError(message) {
+            $('#errorMessage').text(message).show();
+            $('#successMessage').hide();
+        }
+
+        function hideMessages() {
+            $('#successMessage').hide();
+            $('#errorMessage').hide();
+        }
+
+        // Auto-hide logout message after a few seconds
+        if ($('#logoutMessage').is(':visible')) {
+            setTimeout(function() {
+                $('#logoutMessage').fadeOut();
+            }, 3000);
+        }
+
+        // Prevent form resubmission on page refresh
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    });
+
+    // Forgot password function
+    function showForgotPassword() {
+        alert('Password reset functionality will be implemented by your administrator. Please contact your system administrator for password reset assistance.');
+    }
+
+    // Check if user is already logged in
+    function checkExistingLogin() {
+        const authToken = localStorage.getItem('authToken');
+        const currentUser = localStorage.getItem('currentUser');
+
+        if (authToken && currentUser) {
+            const user = JSON.parse(currentUser);
+            // Verify token is still valid (you might want to make an API call to verify)
+            if (user.IsAdmin) {
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                window.location.href = 'employee-list.html';
+            }
+        }
+    }
+
+    // Check for existing login when page loads (uncomment if needed)
+    // checkExistingLogin();
+    </script>
+</body>
+</html>
