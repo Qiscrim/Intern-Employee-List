@@ -6,6 +6,8 @@
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
             --primary-color: #2d545e;
@@ -77,43 +79,135 @@
             font-size: var(--font-size-xl);
             font-weight: 700;
             letter-spacing: -0.025em;
+            cursor: pointer;
+            gap:10px;
+        }
+        .logo:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
         }
 
-        .nav {
+        .logo-icon {
+            font-size:var(--font-size-xl);
+            transition: transform 0.3s ease;
+        }
+
+   
+            
+/* Add this CSS to employee-list.html style section for the admin dashboard link */
+.nav-link.admin-only {
+    background: rgba(231, 76, 60, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.nav-link.admin-only:hover {
+    background: rgba(231, 76, 60, 0.2);
+}
+            
+/* FIXED SIDEBAR STYLES */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Initially hidden off-screen */
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            color: white;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            left: 0; /* Slide in when active */
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
-            gap: var(--spacing-4);
-            margin: 8px;
-            font-size: var(--font-size-sm);
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--font-size-2xl);
         }
 
-        a.nav-link:link,
-        a.nav-link:visited {
+        .sidebar-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .sidebar-item {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
             color: white;
             text-decoration: none;
-            font-size: var(--font-size-sm);
+            transition: background-color 0.3s ease;
+            gap: var(--spacing-4);
         }
 
-        .nav-link {
-            position: relative;
+        .sidebar-link:hover {
+            background-color: var(--primary-dark);
+            color: white;
             text-decoration: none;
-            padding-bottom: 4px;
         }
 
-            .nav-link::after {
-                content: "";
-                position: absolute;
-                left: 50%;
-                bottom: 0;
-                width: 0;
-                height: 2px;
-                background: white;
-                transition: width 0.3s ease, left 0.3s ease;
-            }
+        .sidebar-link i {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
 
-            .nav-link:hover::after {
-                width: 100%;
-                left: 0;
-            }
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
 
         /* Form Section */
         .container {
@@ -364,16 +458,61 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="logo">Unique Concept</div>
-            <nav class="nav">
-                <a href="employee-list.html" class="nav-link active">Employee List</a>
-                <a href="add-employee.html" class="nav-link">Add Employee</a>
-                <!-- Admin Dashboard link - will be shown/hidden based on user role -->
-                <a href="admin-dashboard.html" id="adminDashboardLink" class="nav-link" style="display: none;">Admin Dashboard</a>
-                <a href="login.html?logout=true" class="nav-link">Logout</a>
-            </nav>
+            <div class="logo" id="logoBtn">
+                <i class="fas fa-bars logo-icon"></i>
+                <span>Unique Concept</span>
+            </div>
+            <div class="welcome-message">
+                Welcome, <span id="username"></span>
+            </div>
         </div>
     </header>
+
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+
+        <div class="sidebar-header">
+            <div class="sidebar-title">
+                <span style="font-size: 24px;">Menu</span>
+            </div>
+            <button id="closeSidebarBtn" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <div class="sidebar-nav">
+            <div class="sidebar-item">
+                <a href="employee-list.html" class="sidebar-link">
+                    <i class="fas fa-list-ul"></i>
+                    <span class="sidebar-tex">Employee List</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="add-employee.html" class="sidebar-link">
+                    <i class="fas fa-user-plus"></i>
+                    <span class="sidebar-text">Add Employee</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="admin-dashboard.html" id="adminDashboardLink" class="sidebar-link admin-only" style="display: none;">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="nav-text">Admin Dashboard</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="login.html?logout=true" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="sidebar-tex">Logout</span>
+            </a>
+        </div>
+    </div>
+
 
     <!-- Add Employee Form -->
     <div class="container">
@@ -441,10 +580,102 @@
     </div>
 
     <script>
+
+        // Add this function to employee-list.html to debug authentication issues
+        function debugAuth() {
+            console.log('=== DEBUGGING AUTHENTICATION ===');
+
+            const currentUser = localStorage.getItem('currentUser');
+            const authToken = localStorage.getItem('authToken');
+
+            console.log('Raw currentUser from localStorage:', currentUser);
+            console.log('Raw authToken from localStorage:', authToken);
+
+            if (currentUser) {
+                try {
+                    const parsedUser = JSON.parse(currentUser);
+                    console.log('Parsed user object:', parsedUser);
+                    console.log('User IsAdmin property:', parsedUser.IsAdmin);
+                    console.log('Type of IsAdmin:', typeof parsedUser.IsAdmin);
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                }
+            } else {
+                console.error('No currentUser in localStorage');
+            }
+
+            if (!authToken) {
+                console.error('No authToken in localStorage');
+            }
+
+            console.log('=== END DEBUG ===');
+        }
+
+        // Call this in your checkUserAuth function
+        function checkUserAuth() {
+            debugAuth(); // Add this line for debugging
+
+            const currentUser = localStorage.getItem('currentUser');
+            const authToken = localStorage.getItem('authToken');
+
+            if (!currentUser || !authToken) {
+                console.log('Missing auth data, redirecting to login');
+                window.location.href = 'login.html';
+                return;
+            }
+
+
+            try {
+                const user = JSON.parse(currentUser);
+                console.log('Current user:', user);
+
+                // Set username in header (moved inside try block)
+                document.getElementById('username').textContent = user.Username || 'User';
+
+                // Show admin dashboard link only for admin users
+                if (user.IsAdmin) {
+                    $('#adminDashboardLink').show();
+                    console.log('Admin link shown');
+                } else {
+                    $('#adminDashboardLink').hide();
+                    console.log('Admin link hidden');
+                }
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+                window.location.href = 'login.html';
+            }
+        }
+        //SIDEBAR FUNCTION
+        // Get elements
+        const logoBtn = document.getElementById('logoBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+        // Open sidebar
+        logoBtn.addEventListener('click', function () {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        // Close sidebar - close button
+        closeSidebarBtn.addEventListener('click', function () {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        // Close sidebar - overlay click
+        sidebarOverlay.addEventListener('click', function () {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+        //END OF SIDEBAR
+
     $(document).ready(function () {
         let isSubmitting = false;
         let existingRoles = [];
         let currentMode = 'existing'; // 'existing' or 'custom'
+        checkUserAuth();
 
         // Load existing roles on page load
         loadExistingRoles();

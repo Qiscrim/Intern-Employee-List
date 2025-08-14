@@ -7,20 +7,65 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
     <link rel="stylesheet" href="employee-liststyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="logo">Unique Concept</div>
-            <nav class="nav">
-                <a href="employee-list.html" class="nav-link active">Employee List</a>
-                <a href="add-employee.html" class="nav-link">Add Employee</a>
-                <!-- Admin Dashboard link - will be shown/hidden based on user role -->
-                <a href="admin-dashboard.html" id="adminDashboardLink" class="nav-link" style="display: none;">Admin Dashboard</a>
-                <a href="login.html?logout=true" class="nav-link">Logout</a>
-            </nav>
+            <div class="logo" id="logoBtn">
+                <i class="fas fa-bars logo-icon"></i>
+                <span>Unique Concept</span>
+            </div>
+            <div class="welcome-message">
+                Welcome, <span id="username"></span>
+            </div>
         </div>
     </header>
+
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+
+        <div class="sidebar-header">
+            <div class="sidebar-title">
+                <span style="font-size: 24px;">Menu</span>
+            </div>
+            <button id="closeSidebarBtn" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <div class="sidebar-nav">
+            <div class="sidebar-item">
+                <a href="employee-list.html" class="sidebar-link">
+                    <i class="fas fa-list-ul"></i>
+                    <span class="sidebar-tex">Employee List</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="add-employee.html" class="sidebar-link">
+                    <i class="fas fa-user-plus"></i>
+                    <span class="sidebar-text">Add Employee</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="admin-dashboard.html" id="adminDashboardLink" class="sidebar-link admin-only" style="display: none;">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="nav-text">Admin Dashboard</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="login.html?logout=true" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="sidebar-tex">Logout</span>
+            </a>
+        </div>
+    </div>
 
     <main>
         <!-- Intro Message -->
@@ -128,6 +173,7 @@
     </main>
 
     <script>
+
         // Add this function to employee-list.html to debug authentication issues
         function debugAuth() {
             console.log('=== DEBUGGING AUTHENTICATION ===');
@@ -171,9 +217,13 @@
                 return;
             }
 
+
             try {
                 const user = JSON.parse(currentUser);
                 console.log('Current user:', user);
+
+                // Set username in header (moved inside try block)
+                document.getElementById('username').textContent = user.Username || 'User';
 
                 // Show admin dashboard link only for admin users
                 if (user.IsAdmin) {
@@ -188,6 +238,32 @@
                 window.location.href = 'login.html';
             }
         }
+        //SIDEBAR FUNCTION
+        // Get elements
+        const logoBtn = document.getElementById('logoBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+        // Open sidebar
+        logoBtn.addEventListener('click', function () {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        // Close sidebar - close button
+        closeSidebarBtn.addEventListener('click', function () {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        // Close sidebar - overlay click
+        sidebarOverlay.addEventListener('click', function () {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+        //END OF SIDEBAR
+
 
         // Simple variables to store data
         let allEmployees = [];        // All employees fetched from the backend (used as the base for filtering)
@@ -211,6 +287,8 @@
             setupSortHandlers();
             setupPaginationHandlers();
         });
+
+
 
     // Setup pagination event handlers
     function setupPaginationHandlers() {

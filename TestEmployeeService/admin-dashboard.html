@@ -7,9 +7,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
     <link rel="stylesheet" href="admin-dashboardstyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header 
     <header class="header">
         <div class="header-content">
             <div class="logo">
@@ -22,7 +24,64 @@
                 <a href="login.html?logout=true" class="nav-link">Logout</a>
             </nav>
         </div>
+    </header>-->
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo" id="logoBtn">
+                <i class="fas fa-bars logo-icon"></i>
+                <span>Unique Concept</span>
+            </div>
+            <div class="welcome-message">
+                Welcome, <span id="username"></span>
+                <span class="admin-badge">🛡️ Administrator Access</span>
+            </div>
+        </div>
     </header>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+
+        <div class="sidebar-header">
+            <div class="sidebar-title">
+                <span style="font-size: 24px;">Menu</span>
+            </div>
+            <button id="closeSidebarBtn" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <div class="sidebar-nav">
+            <div class="sidebar-item">
+                <a href="employee-list.html" class="sidebar-link">
+                    <i class="fas fa-list-ul"></i>
+                    <span class="sidebar-tex">Employee List</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="add-employee.html" class="sidebar-link">
+                    <i class="fas fa-user-plus"></i>
+                    <span class="sidebar-text">Add Employee</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="admin-dashboard.html" id="adminDashboardLink" class="sidebar-link admin-only" style="display: none;">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="nav-text">Admin Dashboard</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="login.html?logout=true" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="sidebar-tex">Logout</span>
+            </a>
+        </div>
+    </div>
 
     <!-- Main Container -->
     <div class="container">
@@ -170,6 +229,97 @@
     </div>
 
     <script>
+
+        // Add this function to employee-list.html to debug authentication issues
+        function debugAuth() {
+            console.log('=== DEBUGGING AUTHENTICATION ===');
+
+            const currentUser = localStorage.getItem('currentUser');
+            const authToken = localStorage.getItem('authToken');
+
+            console.log('Raw currentUser from localStorage:', currentUser);
+            console.log('Raw authToken from localStorage:', authToken);
+
+            if (currentUser) {
+                try {
+                    const parsedUser = JSON.parse(currentUser);
+                    console.log('Parsed user object:', parsedUser);
+                    console.log('User IsAdmin property:', parsedUser.IsAdmin);
+                    console.log('Type of IsAdmin:', typeof parsedUser.IsAdmin);
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                }
+            } else {
+                console.error('No currentUser in localStorage');
+            }
+
+            if (!authToken) {
+                console.error('No authToken in localStorage');
+            }
+
+            console.log('=== END DEBUG ===');
+        }
+
+        // Call this in your checkUserAuth function
+        function checkUserAuth() {
+            debugAuth(); // Add this line for debugging
+
+            const currentUser = localStorage.getItem('currentUser');
+            const authToken = localStorage.getItem('authToken');
+
+            if (!currentUser || !authToken) {
+                console.log('Missing auth data, redirecting to login');
+                window.location.href = 'login.html';
+                return;
+            }
+
+
+            try {
+                const user = JSON.parse(currentUser);
+                console.log('Current user:', user);
+
+                // Set username in header (moved inside try block)
+                document.getElementById('username').textContent = user.Username || 'User';
+
+                // Show admin dashboard link only for admin users
+                if (user.IsAdmin) {
+                    $('#adminDashboardLink').show();
+                    console.log('Admin link shown');
+                } else {
+                    $('#adminDashboardLink').hide();
+                    console.log('Admin link hidden');
+                }
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+                window.location.href = 'login.html';
+            }
+        }
+        //SIDEBAR FUNCTION
+        // Get elements
+        const logoBtn = document.getElementById('logoBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+        // Open sidebar
+        logoBtn.addEventListener('click', function () {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        // Close sidebar - close button
+        closeSidebarBtn.addEventListener('click', function () {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        // Close sidebar - overlay click
+        sidebarOverlay.addEventListener('click', function () {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+        //END OF SIDEBAR
+
         let allUsers = [];
         let currentEditUserId = null;
         let currentUser = null; // Store current logged-in user data
@@ -177,6 +327,7 @@
 
         // Initialize dashboard
         $(document).ready(function () {
+            checkUserAuth(); // Add this line first
             checkAdminAuth();
             loadUsers();
             setupEventListeners();
@@ -216,7 +367,9 @@
                     $('#rootAdminIndicator').show();
                 }
 
-                $('.admin-info span:first').text(`Welcome, ${currentUser.Username}`);
+                // UPDATE THIS LINE - Display the username in the header
+                $('#username').text(currentUser.Username);
+
                 console.log('Admin access granted');
                 return true;
             } catch (e) {
