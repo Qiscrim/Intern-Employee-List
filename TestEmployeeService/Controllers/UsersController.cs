@@ -11,86 +11,7 @@ using TestEmployeeDataAccess;
 namespace TestEmployeeService.Controllers
 {
     public class UsersController : ApiController
-    {
-        [HttpPost]
-        [Route("api/users/create-initial-admin")]
-        public HttpResponseMessage CreateInitialAdmin([FromBody] CreateInitialAdminRequest request)
-        {
-            try
-            {
-                using (TestEmployeeDBEntities entities = new TestEmployeeDBEntities())
-                {
-                    // TEMPORARY: Comment out the admin check to allow creating another admin
-                    /*
-                    var existingAdminCount = entities.Users.Count(u => u.IsAdmin);
-                    if (existingAdminCount > 0)
-                    {
-                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            "Admin users already exist. This endpoint can only be used once.");
-                    }
-                    */
-
-                    // Validate input
-                    if (request == null || string.IsNullOrWhiteSpace(request.Username) ||
-                        string.IsNullOrWhiteSpace(request.Password))
-                    {
-                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            "Username and password are required.");
-                    }
-
-                    if (request.Password.Length < 6)
-                    {
-                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            "Password must be at least 6 characters long.");
-                    }
-
-                    // Check if username already exists
-                    var existingUser = entities.Users.FirstOrDefault(u =>
-                        u.Username.ToLower() == request.Username.ToLower());
-                    if (existingUser != null)
-                    {
-                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            "Username already exists.");
-                    }
-
-                    // Create new admin user
-                    var adminUser = new User
-                    {
-                        Username = request.Username,
-                        PasswordHash = HashPassword(request.Password),
-                        IsAdmin = true,
-                        CreatedDate = DateTime.Now,
-                        LastLoginDate = null
-                    };
-
-                    entities.Users.Add(adminUser);
-                    entities.SaveChanges();
-
-                    var response = new
-                    {
-                        Message = "Admin user created successfully! REMOVE THIS ENDPOINT NOW!",
-                        Username = adminUser.Username,
-                        IsAdmin = adminUser.IsAdmin,
-                        ID = adminUser.ID,
-                        Warning = "Please remove the create-initial-admin endpoint from your controller for security!"
-                    };
-
-                    return Request.CreateResponse(HttpStatusCode.Created, response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,
-                    "Failed to create admin: " + ex.Message);
-            }
-        }
-
-        // Also add this request model at the bottom with your other models
-        public class CreateInitialAdminRequest
-        {
-            public string Username { get; set; }
-            public string Password { get; set; }
-        }
+    {   
 
         // POST api/users/register
         [HttpPost]
@@ -130,6 +51,7 @@ namespace TestEmployeeService.Controllers
                         Username = request.Username,
                         PasswordHash = HashPassword(request.Password),
                         IsAdmin = false, // Default to non-admin
+                        IsRootAdmin= false,// Default to non-rootadmin
                         CreatedDate = DateTime.Now,
                         LastLoginDate = null
                     };
@@ -199,6 +121,7 @@ namespace TestEmployeeService.Controllers
                             ID = user.ID,
                             Username = user.Username,
                             IsAdmin = user.IsAdmin,
+                            IsRootAdmin = user.IsRootAdmin,
                             LastLoginDate = user.LastLoginDate
                         }
                     };
@@ -229,7 +152,8 @@ namespace TestEmployeeService.Controllers
                         Username = u.Username,
                         IsAdmin = u.IsAdmin,
                         CreatedDate = u.CreatedDate,
-                        LastLoginDate = u.LastLoginDate
+                        LastLoginDate = u.LastLoginDate,
+                        IsRootAdmin = u.IsRootAdmin
                         // Note: Never return password hashes for security
                     }).ToList();
 
@@ -262,7 +186,9 @@ namespace TestEmployeeService.Controllers
                         Username = user.Username,
                         IsAdmin = user.IsAdmin,
                         CreatedDate = user.CreatedDate,
-                        LastLoginDate = user.LastLoginDate
+                        LastLoginDate = user.LastLoginDate,
+                        IsRootAdmin = user.IsRootAdmin
+
                     };
 
                     return Request.CreateResponse(HttpStatusCode.OK, response);
@@ -313,6 +239,7 @@ namespace TestEmployeeService.Controllers
                         Username = request.Username,
                         PasswordHash = HashPassword(request.Password),
                         IsAdmin = request.IsAdmin,
+                        //IsRootAdmin= request.IsRootAdmin,
                         CreatedDate = DateTime.Now,
                         LastLoginDate = null
                     };
@@ -360,14 +287,20 @@ namespace TestEmployeeService.Controllers
                 }
 
                 using (TestEmployeeDBEntities entities = new TestEmployeeDBEntities())
-                {
+                {   // Find the user to update
                     var user = entities.Users.FirstOrDefault(u => u.ID == id);
                     if (user == null)
                     {
                         return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User not found.");
                     }
 
-                    // Update password
+                    // ✅ NEW: Check if same password
+                    if (VerifyPassword(request.NewPassword, user.PasswordHash))
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                            "New password cannot be the same as the current password. Please choose a different password.");
+                    }
+                    // Hash the new password and save it
                     user.PasswordHash = HashPassword(request.NewPassword);
                     entities.SaveChanges();
 
@@ -409,8 +342,15 @@ namespace TestEmployeeService.Controllers
                         return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User not found.");
                     }
 
+                    // ✅ NEW: Prevent changing RootAdmin role
+                    if (user.IsRootAdmin == true)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.Forbidden,
+                            "Cannot modify root administrator role. Root admin role is protected.");
+                    }
+
                     // Update role
-                    user.IsAdmin = request.IsAdmin;
+                    user.IsAdmin = request.IsAdmin; // Set new value
                     entities.SaveChanges();
 
                     var response = new
@@ -446,6 +386,13 @@ namespace TestEmployeeService.Controllers
                         return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User not found.");
                     }
 
+                    // ✅ NEW: Prevent deleting RootAdmin
+                    if (user.IsRootAdmin == true)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.Forbidden,
+                            "Cannot delete root administrator account. Root admin is protected.");
+                    }
+
                     // Prevent deleting the last admin user
                     if (user.IsAdmin)
                     {
@@ -476,7 +423,6 @@ namespace TestEmployeeService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to delete user: " + ex.Message);
             }
         }
-
         #region Helper Methods
 
         // Hash password using SHA256 (in production, use bcrypt or similar)

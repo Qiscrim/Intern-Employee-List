@@ -24,5 +24,6 @@
     <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
     <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+    <Property Name="IsRootAdmin" Type="Boolean" />
   </EntityType>
 </Schema>

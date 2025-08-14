@@ -20,6 +20,7 @@
     <Property Name="IsAdmin" Type="bit" Nullable="false" />
     <Property Name="CreatedDate" Type="datetime" Nullable="false" />
     <Property Name="LastLoginDate" Type="datetime" />
+    <Property Name="IsRootAdmin" Type="bit" />
   </EntityType>
   <EntityContainer Name="TestEmployeeDBModelStoreContainer">
     <EntitySet Name="TestEmployees" EntityType="Self.TestEmployees" Schema="dbo" store:Type="Tables" />

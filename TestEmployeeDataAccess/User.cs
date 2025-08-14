@@ -20,5 +20,6 @@ namespace TestEmployeeDataAccess
         public bool IsAdmin { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> LastLoginDate { get; set; }
+        public Nullable<bool> IsRootAdmin { get; set; }
     }
 }

@@ -286,12 +286,14 @@
   <ItemGroup>
     <Content Include="add-employee.html" />
     <Content Include="admin-dashboard.html" />
+    <Content Include="admin-dashboardstyles.css" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="create-admin.html" />
     <Content Include="edit-employee.html" />
     <Content Include="employee-list.html" />
+    <Content Include="employee-liststyles.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

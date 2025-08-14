@@ -6,640 +6,29 @@
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #2d545e;
-            --primary-light: #3d6570;
-            --primary-dark: #1d3640;
-            --secondary-color: #4a6fa5;
-            --accent-color: #e67e22;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --info-color: #3498db;
-            --white: #ffffff;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #cbd5e1;
-            --gray-400: #94a3b8;
-            --gray-500: #64748b;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --font-size-sm: 0.875rem;
-            --font-size-base: 1rem;
-            --font-size-lg: 1.125rem;
-            --font-size-xl: 1.25rem;
-            --font-size-2xl: 1.5rem;
-            --spacing-2: 0.5rem;
-            --spacing-4: 1rem;
-            --spacing-6: 1.5rem;
-            --spacing-8: 2rem;
-            --spacing-12: 3rem;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
-            min-height: 100vh;
-            color: var(--gray-800);
-            line-height: 1.6;
-        }
-
-        /* Header */
-        .dashboard-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: var(--white);
-            padding: 1rem 1rem;
-            box-shadow: var(--shadow-lg);
-            position: static;
-            transition: all 0.3s ease;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: var(--font-size-xl);
-            font-weight: 700;
-            letter-spacing: -0.025em;
-        }
-
-            .logo::before {
-                content: '';
-                margin-right: 0.5rem;
-                font-size: 1.8rem;
-            }
-
-        .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: var(--font-size-sm);
-        }
-
-            .logout-btn:hover {
-                background: rgba(255, 255, 255, 0.3);
-                color: white;
-                text-decoration: none;
-            }
-
-        /* Main Container */
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            border-left: 4px solid;
-            transition: transform 0.2s ease;
-        }
-
-            .stat-card:hover {
-                transform: translateY(-2px);
-            }
-
-            .stat-card.total {
-                border-left-color: var(--info-color);
-            }
-
-            .stat-card.admins {
-                border-left-color: var(--warning-color);
-            }
-
-            .stat-card.regular {
-                border-left-color: var(--success-color);
-            }
-
-            .stat-card.recent {
-                border-left-color: var(--accent-color);
-            }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-title {
-            color: var(--gray-600);
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-icon {
-            font-size: 1.5rem;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--gray-800);
-        }
-
-        /* User Management Section */
-        .management-section {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            overflow: hidden;
-        }
-
-        .section-header {
-            background: var(--gray-50);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--gray-800);
-        }
-
-        .add-user-btn {
-            background: linear-gradient(135deg, var(--success-color) 0%, #229954 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-            .add-user-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            }
-
-        /* Search and Filters */
-        .controls-section {
-            padding: 1.5rem 2rem;
-            background: var(--gray-50);
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 250px;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            border: 2px solid var(--gray-300);
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-            .search-input:focus {
-                outline: none;
-                border-color: var(--primary-color);
-            }
-
-        .search-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray-400);
-        }
-
-        .filter-select {
-            padding: 0.75rem;
-            border: 2px solid var(--gray-300);
-            border-radius: 8px;
-            background: white;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        /* Users Table */
-        .users-table-container {
-            overflow-x: auto;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-            .users-table th {
-                background: var(--primary-color);
-                color: white;
-                padding: 1rem;
-                text-align: left;
-                font-weight: 600;
-                position: sticky;
-                top: 0;
-                z-index: 10;
-            }
-
-            .users-table td {
-                padding: 1rem;
-                border-bottom: 1px solid var(--gray-200);
-                vertical-align: middle;
-            }
-
-            .users-table tbody tr:hover {
-                background: var(--gray-50);
-            }
-
-        /* User Row Styles */
-        .user-id {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .username {
-            font-weight: 500;
-            color: var(--gray-800);
-        }
-
-        .admin-badge {
-            background: linear-gradient(135deg, var(--warning-color), #d68910);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .regular-badge {
-            background: linear-gradient(135deg, var(--success-color), #229954);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .password-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .password-display {
-            font-family: 'Courier New', monospace;
-            background: var(--gray-100);
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            min-width: 100px;
-            border: 1px solid var(--gray-300);
-        }
-
-        .password-hidden {
-            color: var(--gray-500);
-            font-style: italic;
-        }
-
-        .toggle-password-btn {
-            background: var(--info-color);
-            color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
-        }
-
-        .edit-password-btn {
-            background: var(--warning-color);
-            color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            margin-left: 0.25rem;
-        }
-
-        .created-date {
-            color: var(--gray-600);
-            font-size: 0.875rem;
-        }
-
-        .last-login {
-            color: var(--gray-600);
-            font-size: 0.875rem;
-        }
-
-            .last-login.never {
-                color: var(--gray-400);
-                font-style: italic;
-            }
-
-            .last-login.recent {
-                color: var(--success-color);
-                font-weight: 500;
-            }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn-sm {
-            padding: 0.5rem 0.75rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-edit {
-            background: var(--info-color);
-            color: white;
-        }
-
-        .btn-delete {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .btn-sm:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-
-            .modal.show {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-        .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--gray-800);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--gray-500);
-            padding: 0.25rem;
-        }
-
-            .close-btn:hover {
-                color: var(--gray-800);
-            }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--gray-800);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--gray-300);
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-            .form-input:focus {
-                outline: none;
-                border-color: var(--primary-color);
-            }
-
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: var(--gray-300);
-            color: var(--gray-800);
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Messages */
-        .message {
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            font-weight: 500;
-            display: none;
-        }
-
-            .message.success {
-                background: #d4edda;
-                color: #155724;
-                border: 1px solid #c3e6cb;
-            }
-
-            .message.error {
-                background: #f8d7da;
-                color: #721c24;
-                border: 1px solid #f5c6cb;
-            }
-
-            .message.show {
-                display: block;
-            }
-
-        /* Loading States */
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--gray-600);
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--gray-300);
-            border-top: 2px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .dashboard-container {
-                padding: 1rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .controls-section {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-box {
-                min-width: auto;
-            }
-
-            .users-table {
-                font-size: 0.875rem;
-            }
-
-                .users-table th,
-                .users-table td {
-                    padding: 0.75rem 0.5rem;
-                }
-        }
-    </style>
+    <link rel="stylesheet" href="admin-dashboardstyles.css">
 </head>
 <body>
     <!-- Header -->
-    <header class="dashboard-header">
+    <header class="header">
         <div class="header-content">
-            <div class="logo">Unique Concept</div>
-            <div class="admin-info">
-                <a href="employee-list.html" style="color: white; text-decoration: none; margin-right: 1rem; padding: 0.5rem; border-radius: 4px; background: rgba(255,255,255,0.1);">← Employee List</a>
-                <span>Admin Dashboard</span>
-                <a href="login.html?logout=true" class="logout-btn">Logout</a>
+            <div class="logo">
+                Unique Concept
+                <span class="admin-badge">🛡️ Administrator Access</span>
             </div>
+            <nav class="nav">
+                <a href="employee-list.html" class="nav-link active">Employee List</a>
+                <a href="add-employee.html" class="nav-link">Add Employee</a>
+                <a href="login.html?logout=true" class="nav-link">Logout</a>
+            </nav>
         </div>
     </header>
 
     <!-- Main Container -->
-    <div class="dashboard-container">
+    <div class="container">
+        <h1 class="page-title">Account Management</h1>
+        <p class="page-subtitle">Manage user accounts, roles, and permissions</p>
+
         <!-- Statistics Cards -->
         <div class="stats-grid">
             <div class="stat-card total">
@@ -663,13 +52,6 @@
                 </div>
                 <div class="stat-value" id="regularUsers">0</div>
             </div>
-            <!--    <div class="stat-card recent">
-                    <div class="stat-header">
-                        <span class="stat-title">Recent Logins</span>
-                        <span class="stat-icon"></span>
-                    </div>
-                    <div class="stat-value" id="recentLogins">0</div>
-                </div>-->
         </div>
 
         <!-- User Management Section -->
@@ -699,38 +81,38 @@
                 </select>
                 <button class="btn btn-secondary" onclick="refreshUsers()"> Refresh</button>
             </div>
-
-            <!-- Users Table -->
-            <div class="users-table-container">
-                <div id="loadingIndicator" class="loading">
-                    <div class="spinner"></div>
-                    Loading users...
-                </div>
-                <table class="users-table" id="usersTable" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Role</th>
-                            <th>Created Date</th>
-                            <th>Last Login</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody">
-                        <!-- Users will be populated here -->
-                    </tbody>
-                </table>
-            </div>
         </div>
+
+        <!-- Users Table -->
+        <div class="users-table-container">
+            <div id="loadingIndicator" class="loading">
+                <div class="spinner"></div>
+                Loading users...
+            </div>
+            <table class="users-table" id="usersTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Authorization</th>
+                        <th>Created Date</th>
+                        <th>Last Login</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Users will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
     <!-- Edit Password Modal -->
     <div id="editPasswordModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Change Password</h3>
+                <h3 class="modal-title">Reset Password</h3>
                 <button class="close-btn" onclick="closeEditPasswordModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -745,13 +127,16 @@
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeEditPasswordModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="savePasswordChange()">Update Password</button>
+                <button class="btn btn-primary" onclick="savePasswordChange()">Reset Password</button>
             </div>
+            <!-- Messages -->
+            <div id="successMessage" class="message success"></div>
+            <div id="errorMessage" class="message error"></div>
         </div>
     </div>
 
     <!-- Add User Modal -->
-    <div id="addUserModal" class="modal">
+<div id="addUserModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Add New User</h3>
@@ -779,33 +164,34 @@
                 <button class="btn btn-primary" onclick="saveNewUser()">Add User</button>
             </div>
         </div>
+        <!-- Messages -->
+        <div id="successMessage" class="message success"></div>
+        <div id="errorMessage" class="message error"></div>
     </div>
 
     <script>
         let allUsers = [];
         let currentEditUserId = null;
+        let currentUser = null; // Store current logged-in user data
         const API_BASE_URL = 'http://localhost:57696/api';
 
         // Initialize dashboard
-        $(document).ready(function() {
-            // Check if user is admin
+        $(document).ready(function () {
             checkAdminAuth();
             loadUsers();
             setupEventListeners();
         });
 
-        // Replace the checkAdminAuth function in admin-dashboard.html (around line 350-370) with this enhanced version:
-
         // Check if user is authenticated and is admin
         function checkAdminAuth() {
-            const currentUser = localStorage.getItem('currentUser');
+            const currentUserData = localStorage.getItem('currentUser');
             const authToken = localStorage.getItem('authToken');
 
             console.log('Checking admin auth...');
-            console.log('Current user:', currentUser);
+            console.log('Current user:', currentUserData);
             console.log('Auth token:', authToken ? 'Present' : 'Missing');
 
-            if (!currentUser || !authToken) {
+            if (!currentUserData || !authToken) {
                 console.log('No auth data found, redirecting to login');
                 alert('Please login to access this page.');
                 window.location.href = 'login.html';
@@ -813,19 +199,24 @@
             }
 
             try {
-                const user = JSON.parse(currentUser);
-                console.log('Parsed user:', user);
-                console.log('Is admin:', user.IsAdmin);
+                currentUser = JSON.parse(currentUserData);
+                console.log('Parsed user:', currentUser);
+                console.log('Is admin:', currentUser.IsAdmin);
+                console.log('Is root admin:', currentUser.IsRootAdmin);
 
-                if (!user.IsAdmin) {
+                if (!currentUser.IsAdmin) {
                     console.log('User is not admin, access denied');
                     alert('Access denied. Administrator privileges required.');
                     window.location.href = 'employee-list.html';
                     return false;
                 }
 
-                // Update welcome message
-                $('.admin-info span:first').text(`Welcome, ${user.Username}`);
+                // Show root admin indicator if applicable
+                if (currentUser.IsRootAdmin) {
+                    $('#rootAdminIndicator').show();
+                }
+
+                $('.admin-info span:first').text(`Welcome, ${currentUser.Username}`);
                 console.log('Admin access granted');
                 return true;
             } catch (e) {
@@ -837,18 +228,15 @@
         }
 
         function setupEventListeners() {
-            // Search functionality
-            $('#searchInput').on('input', function() {
+            $('#searchInput').on('input', function () {
                 filterUsers();
             });
 
-            // Role filter
-            $('#roleFilter').on('change', function() {
+            $('#roleFilter').on('change', function () {
                 filterUsers();
             });
 
-            // Modal close on background click
-            $('.modal').on('click', function(e) {
+            $('.modal').on('click', function (e) {
                 if (e.target === this) {
                     $(this).removeClass('show');
                 }
@@ -867,7 +255,7 @@
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('authToken')
                 },
-                success: function(response) {
+                success: function (response) {
                     allUsers = response;
                     displayUsers(allUsers);
                     updateStatistics();
@@ -879,7 +267,7 @@
                         $('#usersTable').show();
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('Failed to load users:', error);
                     $('#loadingIndicator').hide();
 
@@ -913,7 +301,7 @@
             });
         }
 
-        // Create user table row
+        // Create user table row - UPDATED with proper root admin protection
         function createUserRow(user) {
             const lastLogin = user.LastLoginDate ?
                 formatDate(user.LastLoginDate) :
@@ -922,30 +310,129 @@
             const isRecentLogin = user.LastLoginDate &&
                 new Date(user.LastLoginDate) > new Date(Date.now() - 24 * 60 * 60 * 1000);
 
+            // Check if this is the current user
+            const isSelf = currentUser && currentUser.ID === user.ID;
+
+            // Check if user is root admin
+            const isRootAdmin = user.IsRootAdmin === true;
+
+            // Create role badge
+            let roleBadge = '';
+            if (isRootAdmin) {
+                roleBadge = '<span class="root-admin-badge">👑 Root Admin</span>';
+            } else if (user.IsAdmin) {
+                roleBadge = '<span class="admin-badge">🛡️ Administrator</span>';
+            } else {
+                roleBadge = '<span class="regular-badge">👤 Regular User</span>';
+            }
+
+            // Determine action buttons based on protection status
+            let actionButtons = '';
+            // Password reset button with protection logic
+            if (isRootAdmin && currentUser.IsRootAdmin !== true) {
+                // Regular admin cannot reset root admin password
+                actionButtons += `<button class="btn-sm btn-disabled" title="Only root administrators can reset root admin passwords">🔒 Protected Password</button>`;
+            } else if (isSelf) {
+                // Users cannot reset their own password through this interface
+                actionButtons += `<button class="btn-sm btn-disabled" title="Use profile settings to change your own password">🚫 Own Password</button>`;
+            } else if (user.IsAdmin && currentUser.IsRootAdmin !== true) {
+                // Regular admin cannot reset other regular admin passwords
+                actionButtons += `<button class="btn-sm btn-disabled" title="Regular administrators cannot reset other admin passwords">🚫 Admin Protected</button>`;
+            } else {
+                // Password reset available (Root admin can reset anyone's, Regular admin can only reset regular users)
+                actionButtons += `<button class="btn-sm btn-reset-password" onclick="openEditPasswordModal(${user.ID}, '${user.Username}')" title="Reset Password">🔑 Reset Password</button>`;
+            }
+
+            // Role change button with protection logic
+            if (isRootAdmin) {
+                // Root admin role cannot be changed by anyone (including themselves)
+                actionButtons += `<button class="btn-sm btn-disabled" title="Root admin role cannot be changed">🔒 Protected Role</button>`;
+            } else if (isSelf && currentUser.IsRootAdmin !== true) {
+                // Regular admin cannot change their own role (but RootAdmin can change their own role if needed)
+                actionButtons += `<button class="btn-sm btn-disabled" title="You cannot change your own role">🚫 Self Role</button>`;
+            } else {
+                // Role toggle available for other users
+                // Root admin can change anyone's role except other root admins
+                // Regular admin can only change regular users (not other admins)
+                const canChangeRole = currentUser.IsRootAdmin === true && !isRootAdmin ||
+                                       (currentUser.IsAdmin && currentUser.IsRootAdmin !== true && !user.IsAdmin && !isRootAdmin);
+
+                if (canChangeRole) {
+                    const roleActionButton = user.IsAdmin ?
+                        `<button class="btn-sm btn-make-user" onclick="toggleUserRole(${user.ID}, '${user.Username}', ${user.IsAdmin})" title="Make Regular User">👤 Make User</button>` :
+                        `<button class="btn-sm btn-make-admin" onclick="toggleUserRole(${user.ID}, '${user.Username}', ${user.IsAdmin})" title="Make Administrator">🛡️ Make Admin</button>`;
+                    actionButtons += roleActionButton;
+                } else {
+                    let disabledReason = "Insufficient permissions";
+                    if (user.IsAdmin && currentUser.IsRootAdmin !== true) {
+                        disabledReason = "Regular admins cannot modify other admin roles";
+                    }
+                    actionButtons += `<button class="btn-sm btn-disabled" title="${disabledReason}">🚫 No Access</button>`;
+                }
+            }
+
+            // Delete button with protection logic
+            if (isRootAdmin) {
+                // Root admin cannot be deleted by anyone
+                actionButtons += `<button class="btn-sm btn-disabled" title="Root admin cannot be deleted">🔒 Protected Account</button>`;
+            } else if (isSelf) {
+                // Users cannot delete themselves
+                actionButtons += `<button class="btn-sm btn-disabled" title="You cannot delete yourself">🚫 Self Delete</button>`;
+            } else {
+                // Delete available for others
+                // Root admin can delete anyone except other root admins
+                // Regular admin can only delete regular users (not other admins)
+                const canDelete = currentUser.IsRootAdmin === true && !isRootAdmin ||
+                                  (currentUser.IsAdmin && currentUser.IsRootAdmin !== true && !user.IsAdmin && !isRootAdmin);
+
+                if (canDelete) {
+                    actionButtons += `<button class="btn-sm btn-delete" onclick="confirmDeleteUser(${user.ID}, '${user.Username}')" title="Delete User">🗑️ Delete</button>`;
+                } else {
+                    let disabledReason = "Insufficient permissions";
+                    if (user.IsAdmin && currentUser.IsRootAdmin !== true) {
+                        disabledReason = "Regular admins cannot delete other administrators";
+                    }
+                    actionButtons += `<button class="btn-sm btn-disabled" title="${disabledReason}">🚫 No Access</button>`;
+                }
+            }
+
+            // Apply row classes based on status
+            let rowClass = '';
+            if (isRootAdmin) {
+                rowClass = 'protected-user root-admin-row';
+            } else if (isSelf) {
+                rowClass = 'self-user';
+            } else if (user.IsAdmin) {
+                rowClass = 'admin-user';
+            }
+
+            // Add protection info
+            let protectionInfo = '';
+            if (isRootAdmin) {
+                protectionInfo = '<div class="protection-info root-admin-info">🔒 Root Administrator</div>';
+            } else if (isSelf) {
+                protectionInfo = '<div class="protection-info self-info">👤 Your Account</div>';
+            }
+
             return `
-                <tr data-user-id="${user.ID}">
-                    <td><span class="user-id">#${user.ID}</span></td>
-                    <td><span class="username">${user.Username}</span></td>
-                    <td>
-                        <span class="${user.IsAdmin ? 'admin-badge' : 'regular-badge'}">
-                            ${user.IsAdmin ? 'Administrator' : 'Regular User'}
-                        </span>
-                    </td>
-                    <td><span class="created-date">${formatDate(user.CreatedDate)}</span></td>
-                    <td><span class="last-login ${isRecentLogin ? 'recent' : ''}">${lastLogin}</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-sm btn-edit" onclick="openEditPasswordModal(${user.ID}, '${user.Username}')"
-                                    title="Change Password">🔑 Password</button>
-                            <button class="btn-sm btn-role" onclick="openEditRoleModal(${user.ID}, '${user.Username}', ${user.IsAdmin})"
-                                    title="Change Role">👤 Role</button>
-                            <button class="btn-sm btn-delete" onclick="confirmDeleteUser(${user.ID}, '${user.Username}')"
-                                    title="Delete User">🗑️ Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            `;
+        <tr data-user-id="${user.ID}" class="${rowClass}">
+            <td><span class="user-id">#${user.ID}</span></td>
+            <td>
+                <span class="username">${user.Username}</span>
+                ${protectionInfo}
+            </td>
+            <td>${roleBadge}</td>
+            <td><span class="created-date">${formatDate(user.CreatedDate)}</span></td>
+            <td><span class="last-login ${isRecentLogin ? 'recent' : ''}">${lastLogin}</span></td>
+            <td>
+                <div class="action-buttons">
+                    ${actionButtons}
+                </div>
+            </td>
+        </tr>
+    `;
         }
+
 
         // Filter users based on search and role
         function filterUsers() {
@@ -985,7 +472,73 @@
         // Format date for display
         function formatDate(dateString) {
             const date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // UPDATED: Toggle user role with enhanced protection checks
+        function toggleUserRole(userId, username, currentIsAdmin) {
+            // Get target user details
+            const targetUser = allUsers.find(u => u.ID === userId);
+            if (!targetUser) {
+                showError('User not found.');
+                return;
+            }
+
+            // Enhanced protection checks
+            if (targetUser.IsRootAdmin === true) {
+                showError('Cannot modify root administrator role. Root admin role is protected.');
+                return;
+            }
+
+            // Check if current user has permission to change this role
+            if (!currentUser.IsRootAdmin && targetUser.IsAdmin) {
+                showError('Only root administrators can modify other administrator roles.');
+                return;
+            }
+
+            // Prevent regular admin from changing their own role
+            if (currentUser.ID === userId && currentUser.IsRootAdmin !== true) {
+                showError('You cannot change your own role.');
+                return;
+            }
+
+            const newRole = !currentIsAdmin;
+            const actionText = newRole ? 'promote to Administrator' : 'demote to Regular User';
+
+            if (confirm(`Are you sure you want to ${actionText} for user "${username}"?`)) {
+                $.ajax({
+                    url: `${API_BASE_URL}/users/${userId}/role`,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                    },
+                    data: JSON.stringify({ IsAdmin: newRole }),
+                    success: function (response) {
+                        const successMsg = newRole ?
+                            `${username} has been promoted to Administrator` :
+                            `${username} has been demoted to Regular User`;
+                        showSuccess(successMsg);
+                        loadUsers(); // Reload to show updated role
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Role update error:', error);
+                        let errorMsg = 'Failed to update user role.';
+
+                        if (xhr.responseJSON && xhr.responseJSON.Message) {
+                            errorMsg = xhr.responseJSON.Message;
+                        } else if (xhr.status === 403) {
+                            errorMsg = 'Access denied. Cannot modify this user\'s role.';
+                        } else if (xhr.status === 404) {
+                            errorMsg = 'User not found.';
+                        } else if (xhr.status === 401) {
+                            errorMsg = 'Unauthorized. Please login again.';
+                        }
+
+                        showError(errorMsg);
+                    }
+                });
+            }
         }
 
         // Modal functions
@@ -998,18 +551,6 @@
 
         function closeEditPasswordModal() {
             $('#editPasswordModal').removeClass('show');
-            currentEditUserId = null;
-        }
-
-        function openEditRoleModal(userId, username, isAdmin) {
-            currentEditUserId = userId;
-            $('#editRoleUsername').val(username);
-            $('#editRoleSelect').val(isAdmin.toString());
-            $('#editRoleModal').addClass('show');
-        }
-
-        function closeEditRoleModal() {
-            $('#editRoleModal').removeClass('show');
             currentEditUserId = null;
         }
 
@@ -1028,17 +569,43 @@
         function savePasswordChange() {
             const newPassword = $('#newPassword').val().trim();
 
+            // Basic validation
             if (!newPassword) {
                 showError('Please enter a new password.');
                 return;
             }
-
             if (newPassword.length < 6) {
                 showError('Password must be at least 6 characters long.');
                 return;
             }
 
-            $('#savePasswordBtn').prop('disabled', true).text('Updating...');
+            // Permission checks for password changes
+            if (!currentUser.IsAdmin && !currentUser.IsRootAdmin) {
+                showError('Administrator access required to reset passwords.');
+                return;
+            }
+
+            // Cannot change own password through this endpoint
+            if (currentUser.ID === currentEditUserId) {
+                showError('You cannot reset your own password through this endpoint. Use the profile settings instead.');
+                return;
+            }
+
+            // FIXED: Ensure we have target user data before proceeding
+            if (!targetUser) {
+                showError('Unable to verify target user permissions. Please refresh and try again.');
+                return;
+            }
+
+            // FIXED: More explicit check for root admin protection
+            if (targetUser.IsRootAdmin === true && currentUser.IsRootAdmin !== true) {
+                showError('Only root administrators can modify root administrator passwords.');
+                return;
+            }
+            // Show loading state
+            const $saveBtn = $('#savePasswordBtn');
+            const originalText = $saveBtn.text();
+            $saveBtn.prop('disabled', true).text('Updating...');
 
             $.ajax({
                 url: `${API_BASE_URL}/users/${currentEditUserId}/password`,
@@ -1048,14 +615,13 @@
                     'Authorization': 'Bearer ' + localStorage.getItem('authToken')
                 },
                 data: JSON.stringify({ NewPassword: newPassword }),
-                success: function(response) {
-                    showSuccess(response.Message || 'Password updated successfully');
+                success: function (response) {
+                    showSuccess(response.Message || 'Password reset successfully');
                     closeEditPasswordModal();
-                    // No need to reload - password hashes are not displayed
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('Password update error:', error);
-                    let errorMsg = 'Failed to update password.';
+                    let errorMsg = 'Failed to reset password.';
 
                     if (xhr.responseJSON && xhr.responseJSON.Message) {
                         errorMsg = xhr.responseJSON.Message;
@@ -1066,48 +632,6 @@
                     }
 
                     showError(errorMsg);
-                },
-                complete: function() {
-                    $('#savePasswordBtn').prop('disabled', false).text('Update Password');
-                }
-            });
-        }
-
-        // Save role change
-        function saveRoleChange() {
-            const newRole = $('#editRoleSelect').val() === 'true';
-
-            $('#saveRoleBtn').prop('disabled', true).text('Updating...');
-
-            $.ajax({
-                url: `${API_BASE_URL}/users/${currentEditUserId}/role`,
-                type: 'PUT',
-                contentType: 'application/json',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-                },
-                data: JSON.stringify({ IsAdmin: newRole }),
-                success: function(response) {
-                    showSuccess(response.Message || 'Role updated successfully');
-                    closeEditRoleModal();
-                    loadUsers(); // Reload to show updated role
-                },
-                error: function(xhr, status, error) {
-                    console.error('Role update error:', error);
-                    let errorMsg = 'Failed to update role.';
-
-                    if (xhr.responseJSON && xhr.responseJSON.Message) {
-                        errorMsg = xhr.responseJSON.Message;
-                    } else if (xhr.status === 404) {
-                        errorMsg = 'User not found.';
-                    } else if (xhr.status === 401) {
-                        errorMsg = 'Unauthorized. Please login again.';
-                    }
-
-                    showError(errorMsg);
-                },
-                complete: function() {
-                    $('#saveRoleBtn').prop('disabled', false).text('Update Role');
                 }
             });
         }
@@ -1138,8 +662,6 @@
                 return;
             }
 
-            $('#addUserBtn').prop('disabled', true).text('Creating...');
-
             $.ajax({
                 url: `${API_BASE_URL}/users`,
                 type: 'POST',
@@ -1152,12 +674,12 @@
                     Password: password,
                     IsAdmin: isAdmin
                 }),
-                success: function(response) {
+                success: function (response) {
                     showSuccess(response.Message || `User "${username}" created successfully!`);
                     closeAddUserModal();
-                    loadUsers(); // Reload to show new user
+                    loadUsers();
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('User creation error:', error);
                     let errorMsg = 'Failed to create user.';
 
@@ -1170,47 +692,40 @@
                     }
 
                     showError(errorMsg);
-                },
-                complete: function() {
-                    $('#addUserBtn').prop('disabled', false).text('Add User');
                 }
             });
         }
 
-        // Confirm delete user
+        // UPDATED: Confirm delete user with enhanced protection checks
         function confirmDeleteUser(userId, username) {
+            // Get target user details
+            const targetUser = allUsers.find(u => u.ID === userId);
+            if (!targetUser) {
+                showError('User not found.');
+                return;
+            }
+
+            // Enhanced protection checks
+            if (targetUser.IsRootAdmin === true) {
+                showError('Cannot delete root administrator account. Root admin is protected.');
+                return;
+            }
+
+            // Check if current user has permission to delete this user
+            if (!currentUser.IsRootAdmin && targetUser.IsAdmin) {
+                showError('Only root administrators can delete other administrator accounts.');
+                return;
+            }
+
+            // Prevent self-deletion
+            if (currentUser.ID === userId) {
+                showError('You cannot delete your own account.');
+                return;
+            }
+
             if (confirm(`Are you sure you want to delete user "${username}"?\n\nThis action cannot be undone.`)) {
                 deleteUser(userId, username);
             }
-        }
-
-        // Delete user
-        function deleteUser(userId, username) {
-            $.ajax({
-                url: `${API_BASE_URL}/users/${userId}`,
-                type: 'DELETE',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-                },
-                success: function(response) {
-                    showSuccess(response.Message || `User "${username}" deleted successfully.`);
-                    loadUsers(); // Reload to remove deleted user
-                },
-                error: function(xhr, status, error) {
-                    console.error('User deletion error:', error);
-                    let errorMsg = 'Failed to delete user.';
-
-                    if (xhr.responseJSON && xhr.responseJSON.Message) {
-                        errorMsg = xhr.responseJSON.Message;
-                    } else if (xhr.status === 404) {
-                        errorMsg = 'User not found.';
-                    } else if (xhr.status === 401) {
-                        errorMsg = 'Unauthorized. Please login again.';
-                    }
-
-                    showError(errorMsg);
-                }
-            });
         }
 
         // Refresh users
@@ -1237,7 +752,7 @@
         }
 
         // Keyboard shortcuts
-        $(document).keydown(function(e) {
+        $(document).keydown(function (e) {
             // ESC to close modals
             if (e.key === 'Escape') {
                 $('.modal').removeClass('show');
@@ -1250,5 +765,5 @@
             }
         });
     </script>
-   </body>
- </html>
+</body>
+</html>

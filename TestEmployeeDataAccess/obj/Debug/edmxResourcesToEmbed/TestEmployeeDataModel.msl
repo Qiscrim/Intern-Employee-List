@@ -15,6 +15,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="TestEmployeeDBModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="IsRootAdmin" ColumnName="IsRootAdmin" />
           <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
